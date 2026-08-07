@@ -1,0 +1,6 @@
+{
+  "name": "mrpocket",
+  "description": "پلاتفۆرمی سیگناڵ و ڕووکاری بازرگانی mrpocket - Smart Pocket, Easy Life & Premium Earnings Platform",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

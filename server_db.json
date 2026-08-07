@@ -1,0 +1,422 @@
+{
+  "users": {
+    "user_jack67_1785139877866": {
+      "name": "Jack67",
+      "fib": "07512189738",
+      "pass": "xeQhoj-6qyrdo-nyfhek",
+      "balance": 250,
+      "clicks": 0,
+      "monthly": false,
+      "createdAt": "2026-07-27",
+      "lastActive": 1785143214179,
+      "lastLoginAt": 1785143178158,
+      "isOnline": true,
+      "isLoggedIn": true,
+      "referralCode": "REF-877866",
+      "referralCount": 0,
+      "referralEarnings": 0,
+      "lastFreeGiftClaimedAt": 1785140108087
+    },
+    "user_hvuvuvuv_1786117924861": {
+      "name": "Hvuvuvuv",
+      "email": "hemnjacket@gmail.com",
+      "fib": "07512189767",
+      "pass": "katdeT-rihki1-rufneh",
+      "balance": 509.37,
+      "clicks": 0,
+      "monthly": false,
+      "createdAt": "2026-08-07",
+      "lastActive": 1786117991652,
+      "lastLoginAt": 1786117924861,
+      "isOnline": true,
+      "isLoggedIn": true
+    }
+  },
+  "pendingRequests": [],
+  "tradingSignals": [
+    {
+      "id": "sig-1",
+      "pair": "XAU/USD (زێڕ)",
+      "type": "BUY",
+      "entry": "2385.50 - 2388.00",
+      "tp1": "2394.00",
+      "tp2": "2402.00",
+      "tp3": "2415.00",
+      "sl": "2378.00",
+      "winRate": "94%",
+      "status": "HIT_TP2",
+      "isVip": true,
+      "createdAt": "ئەمڕۆ - 10:15 AM",
+      "notes": "زێڕ لە سەرچاوەی پاڵپشتی بەهێزدایە. ئامانجی دووەم پێکهاکرا (+170 پیپس)."
+    },
+    {
+      "id": "sig-2",
+      "pair": "BTC/USDT (بیتکۆین)",
+      "type": "BUY",
+      "entry": "64,200 - 64,500",
+      "tp1": "65,800",
+      "tp2": "67,000",
+      "tp3": "69,500",
+      "sl": "63,100",
+      "winRate": "89%",
+      "status": "ACTIVE",
+      "isVip": false,
+      "createdAt": "ئەمڕۆ - 11:30 AM",
+      "notes": "شکاندنی بەربەستی سەرەوە بە قەبارەی بەرز. گونجاوە بۆ کڕین."
+    },
+    {
+      "id": "sig-3",
+      "pair": "EUR/USD (یۆرۆ / دۆلار)",
+      "type": "SELL",
+      "entry": "1.0890 - 1.0905",
+      "tp1": "1.0850",
+      "tp2": "1.0810",
+      "tp3": "1.0760",
+      "sl": "1.0935",
+      "winRate": "91%",
+      "status": "HIT_TP1",
+      "isVip": false,
+      "createdAt": "دوێنێ - 03:45 PM",
+      "notes": "ئامانجی یەکەم بە سەرکەوتوویی ژێربڕ کرا (+40 پیپس)."
+    },
+    {
+      "id": "sig-4",
+      "pair": "GBP/JPY (پاوەند / یەن)",
+      "type": "BUY",
+      "entry": "198.20 - 198.50",
+      "tp1": "199.30",
+      "tp2": "200.50",
+      "tp3": "202.00",
+      "sl": "197.40",
+      "winRate": "92%",
+      "status": "ACTIVE",
+      "isVip": true,
+      "createdAt": "ئەمڕۆ - 08:20 AM",
+      "notes": "سیگناڵی تایبەت بۆ ئەندامانی مانگانە. ترێندی بەرەو سەرەوە زۆر بەهێزە."
+    },
+    {
+      "id": "sig-5",
+      "pair": "USOIL (نەوت)",
+      "type": "BUY",
+      "entry": "78.40 - 78.80",
+      "tp1": "80.00",
+      "tp2": "81.50",
+      "tp3": "83.00",
+      "sl": "77.20",
+      "winRate": "87%",
+      "status": "CLOSED",
+      "isVip": false,
+      "createdAt": "دوێنێ - 01:10 PM",
+      "notes": "سیگناڵ بە قازانجی +160 پیپس داگیرا."
+    }
+  ],
+  "appSettings": {
+    "fibNumber": "07512189730",
+    "clickReward": 250,
+    "adminUser": "07512189730",
+    "adminPass": "hemn12345@67",
+    "adminVaultBalance": 0,
+    "referralBonus": 60
+  },
+  "activities": {
+    "user_jack67_1785139877866": [
+      {
+        "id": "act_1785142581935_j9e1",
+        "type": "click",
+        "title": "یاری چرخی بەخت: زەرەر ❌",
+        "detail": "گرەو: 5,000 IQD | زەرەر: -5,000 IQD",
+        "date": "27/07/2026 11:56",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142573152_89zr",
+        "type": "click",
+        "title": "یاری چرخی بەخت: زەرەر ❌",
+        "detail": "گرەو: 25,000 IQD | زەرەر: -25,000 IQD",
+        "date": "27/07/2026 11:56",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142562335_ebev",
+        "type": "click",
+        "title": "یاری چرخی بەخت: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:56",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142235615_pd3f",
+        "type": "click",
+        "title": "یاری چرخی بەخت: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:50",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142126903_disl",
+        "type": "click",
+        "title": "یاری سڵۆت ماچین (Slot): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:48",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142090526_9trv",
+        "type": "click",
+        "title": "یاری تۆپی بەخت (Plinko): قازانج ✅",
+        "detail": "گرەو: 1,000 IQD | قازانج: +200 IQD (ضڕب 1.2x)",
+        "date": "27/07/2026 11:48",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142032424_byvr",
+        "type": "click",
+        "title": "یاری تۆپی بەخت (Plinko): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -800 IQD",
+        "date": "27/07/2026 11:47",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142015062_gumj",
+        "type": "click",
+        "title": "یاری ڕاکێتی خێرا (Crash): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142014456_nc5e",
+        "type": "click",
+        "title": "یاری ڕاکێتی خێرا (Crash): قازانج ✅",
+        "detail": "گرەو: 1,000 IQD | قازانج: +640 IQD (ضڕب 1.64x)",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142011456_2r3k",
+        "type": "click",
+        "title": "یاری ڕاکێتی خێرا (Crash): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142010064_5ldc",
+        "type": "click",
+        "title": "یاری ڕاکێتی خێرا (Crash): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142004311_0nzq",
+        "type": "click",
+        "title": "یاری سڵۆت ماچین (Slot): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785142000562_epnk",
+        "type": "click",
+        "title": "یاری سڵۆت ماچین (Slot): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:46",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141930828_0n0y",
+        "type": "click",
+        "title": "یاری یاریی ڕوومانە (Mines): زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:45",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141907626_lsyc",
+        "type": "click",
+        "title": "یاری کارتی بەخت: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:45",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141906010_ayqb",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:45",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141904065_grar",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:45",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141901296_cpp0",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:45",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141897831_avqh",
+        "type": "click",
+        "title": "یاری کارتی بەخت: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141894716_t6g5",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141891577_cqdt",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141889611_jzd4",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141885199_817x",
+        "type": "click",
+        "title": "یاری کارتی بەخت: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141873841_bh1a",
+        "type": "click",
+        "title": "یاری زار و شانس: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141870859_2eyo",
+        "type": "click",
+        "title": "یاری زار و شانس: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141867374_0lay",
+        "type": "click",
+        "title": "یاری زار و شانس: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141864190_4xx2",
+        "type": "click",
+        "title": "یاری زار و شانس: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141861188_9jhj",
+        "type": "click",
+        "title": "یاری زار و شانس: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141857938_aibk",
+        "type": "click",
+        "title": "یاری زار و شانس: زەرەر ❌",
+        "detail": "گرەو: 1,000 IQD | زەرەر: -1,000 IQD",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      },
+      {
+        "id": "act_1785141854534_ywx1",
+        "type": "click",
+        "title": "یاری زار و شانس: یەکسان ⚖️",
+        "detail": "گرەو: 1,000 IQD | گەڕانەوەی پارەکەت (1x)",
+        "date": "27/07/2026 11:44",
+        "userKey": "user_jack67_1785139877866"
+      }
+    ],
+    "user_hvuvuvuv_1786117924861": [
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$3.20",
+        "id": "act_1786117973305_d2hd",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 18:52"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشنی نوێ کرایەوە (BUY)",
+        "detail": "XAU/USD بە قەبارەی 0.1 لۆت لە نرخی 2347.36",
+        "id": "act_1786117942275_1bvw",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 18:52"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "EUR/USD SELL بە قەبارەی 0.2 لۆت. ئەنجام: +$82.91",
+        "id": "act_1786117941562_ouab",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 18:52"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$123.26",
+        "id": "act_1786117940696_4it5",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 18:52"
+      }
+    ]
+  },
+  "visitors": {
+    "vis_1784975180163_g14h2": {
+      "id": "vis_1784975180163_g14h2",
+      "userKey": "",
+      "userName": "سەردانیکەری مێوان",
+      "userPhone": "",
+      "userFib": "",
+      "page": "home",
+      "lastActive": 1784975475759,
+      "joinedAt": 1784975180316
+    },
+    "vis_1786117876141_6ati3": {
+      "id": "vis_1786117876141_6ati3",
+      "userKey": "user_hvuvuvuv_1786117924861",
+      "userName": "سەردانیکەری مێوان",
+      "userPhone": "07512189767",
+      "userFib": "07512189767",
+      "page": "home",
+      "lastActive": 1786118781542,
+      "joinedAt": 1786117876312,
+      "isLoggedIn": true
+    }
+  }
+}
