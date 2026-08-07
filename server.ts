@@ -40,7 +40,15 @@ function loadDB() {
         activities: parsed.activities || {},
         visitors: parsed.visitors || {}
       };
-      console.log("Database successfully loaded from server_db.json");
+      
+      // Ensure all user real balances are strictly reset to 0
+      Object.keys(db.users).forEach((k) => {
+        if (db.users[k]) {
+          db.users[k].balance = 0;
+        }
+      });
+      saveDB();
+      console.log("Database successfully loaded and user balances reset to 0.");
     } else {
       saveDB();
     }

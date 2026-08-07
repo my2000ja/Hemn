@@ -113,6 +113,11 @@ export default function App() {
       if (savedKey) {
         const freshUser = serverUsers.find(u => u.key === savedKey)?.data;
         if (freshUser && !freshUser.isBanned) {
+          // Zero out real account balance if leftover from mock trades
+          if (freshUser.balance !== 0) {
+            freshUser.balance = 0;
+            saveUserData(savedKey, freshUser);
+          }
           setUserData(freshUser);
         } else if (freshUser?.isBanned || (!freshUser && serverUsers.length > 0)) {
           // Immediately kick out banned or deleted user
@@ -158,6 +163,10 @@ export default function App() {
     if (savedKey) {
       const data = getUserData(savedKey);
       if (data && !data.isBanned) {
+        if (data.balance !== 0) {
+          data.balance = 0;
+          saveUserData(savedKey, data);
+        }
         setCurrentUserKeyState(savedKey);
         setUserData(data);
       } else {

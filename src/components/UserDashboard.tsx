@@ -41,6 +41,7 @@ import {
 import { User, AppSettings, TradingSignal } from '../types';
 import { getActivityLogs, addActivityLog } from '../utils/storage';
 import { MarketChart } from './MarketChart';
+import { MarketTicker } from './MarketTicker';
 
 interface UserDashboardProps {
   user: User;
@@ -76,6 +77,76 @@ interface ActiveTrade {
   timestamp: string;
   accountType?: 'real' | 'demo';
 }
+
+// Helper to generate dynamic candlesticks based on pair and timeframe
+const generateInitialCandles = (pair: string, tf: string = '1m'): Candle[] => {
+  let basePrice = 4234.00;
+  let baseTick = 1.25;
+  if (pair === 'EUR/USD') { basePrice = 1.08435; baseTick = 0.00015; }
+  else if (pair === 'GBP/USD') { basePrice = 1.26745; baseTick = 0.00020; }
+  else if (pair === 'USD/JPY') { basePrice = 156.784; baseTick = 0.025; }
+  else if (pair === 'BTC/USD') { basePrice = 67842.13; baseTick = 12.50; }
+
+  let tfMultiplier = 1;
+  let stepMinutes = 1;
+
+  switch (tf) {
+    case '5m':
+      tfMultiplier = 2.2;
+      stepMinutes = 5;
+      break;
+    case '15m':
+      tfMultiplier = 3.8;
+      stepMinutes = 15;
+      break;
+    case '1h':
+      tfMultiplier = 6.5;
+      stepMinutes = 60;
+      break;
+    case '4h':
+      tfMultiplier = 12.0;
+      stepMinutes = 240;
+      break;
+    case 'D':
+      tfMultiplier = 22.0;
+      stepMinutes = 1440;
+      break;
+    default: // 1m
+      tfMultiplier = 1.0;
+      stepMinutes = 1;
+      break;
+  }
+
+  const tick = baseTick * tfMultiplier;
+  const list: Candle[] = [];
+  const candleCount = 40;
+  const now = new Date();
+  let currentPrice = basePrice - (candleCount / 2) * (tick * 0.35);
+
+  for (let i = 0; i < candleCount; i++) {
+    const minutesAgo = (candleCount - 1 - i) * stepMinutes;
+    const candleDate = new Date(now.getTime() - minutesAgo * 60 * 1000);
+
+    let timeStr = '';
+    if (tf === 'D') {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      timeStr = `${months[candleDate.getMonth()]} ${String(candleDate.getDate()).padStart(2, '0')}`;
+    } else {
+      timeStr = `${String(candleDate.getHours()).padStart(2, '0')}:${String(candleDate.getMinutes()).padStart(2, '0')}`;
+    }
+
+    const dec = pair.includes('JPY') ? 3 : (pair === 'XAU/USD' || pair === 'BTC/USD' ? 2 : 5);
+    const change = (Math.random() - 0.48) * tick * 2.2;
+    const open = Number(currentPrice.toFixed(dec));
+    const close = Number((open + change).toFixed(dec));
+    const high = Number((Math.max(open, close) + Math.random() * tick * 1.4).toFixed(dec));
+    const low = Number((Math.min(open, close) - Math.random() * tick * 1.4).toFixed(dec));
+
+    list.push({ time: timeStr, open, high, low, close });
+    currentPrice = close;
+  }
+  return list;
+};
 
 export const UserDashboard: React.FC<UserDashboardProps> = ({
   user,
@@ -172,15 +243,29 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
 
   // Real-time market prices state (fluctuates dynamically)
   const [marketPrices, setMarketPrices] = useState({
-    'XAU/USD': { price: 2347.68, change: 0.79, high: 2355.20, low: 2331.40 },
+    'XAU/USD': { price: 4234.00, change: 0.79, high: 4252.20, low: 4210.40 },
     'EUR/USD': { price: 1.08435, change: -0.23, high: 1.08620, low: 1.08110 },
     'GBP/USD': { price: 1.26745, change: 0.25, high: 1.27110, low: 1.26250 },
     'USD/JPY': { price: 156.784, change: 0.16, high: 157.250, low: 156.120 },
     'BTC/USD': { price: 67842.13, change: 1.85, high: 68500.00, low: 67120.00 }
   });
 
-  // Dynamic Candlestick State
-  const [candles, setCandles] = useState<Candle[]>([]);
+  // Dynamic Candlestick State with lazy initialization for session continuity
+  const [candles, setCandles] = useState<Candle[]>(() => {
+    const pair = 'EUR/USD';
+    const tf = '1m';
+    const storageKey = `chart_candles_${pair.replace('/', '_')}_${tf}`;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return generateInitialCandles(pair, tf);
+  });
   const [tickCount, setTickCount] = useState(0);
 
   // Mock Notification Badge
@@ -345,36 +430,40 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     setVerifyIdNumber(user.verificationIdNumber || '');
   }, [user]);
 
-  // Helper to generate dynamic candlesticks based on pair
-  const generateInitialCandles = (pair: string): Candle[] => {
-    let basePrice = 2341.25;
-    let tick = 1.25;
-    if (pair === 'EUR/USD') { basePrice = 1.08435; tick = 0.00015; }
-    else if (pair === 'GBP/USD') { basePrice = 1.26745; tick = 0.00020; }
-    else if (pair === 'USD/JPY') { basePrice = 156.784; tick = 0.025; }
-    else if (pair === 'BTC/USD') { basePrice = 67842.13; tick = 12.50; }
-
-    const list: Candle[] = [];
-    let currentPrice = basePrice - 15 * tick;
-    for (let i = 0; i < 26; i++) {
-      const change = (Math.random() - 0.45) * tick * 4; // slight upward bias
-      const open = currentPrice;
-      const close = currentPrice + change;
-      const high = Math.max(open, close) + Math.random() * tick * 2;
-      const low = Math.min(open, close) - Math.random() * tick * 2;
-      const hour = (9 + Math.floor(i / 5)) % 24;
-      const min = (i % 5) * 12;
-      const timeStr = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
-      list.push({ time: timeStr, open, high, low, close });
-      currentPrice = close;
-    }
-    return list;
-  };
-
-  // Switch candles array whenever the selected pair changes
+  // Switch candles array whenever selected pair or timeframe changes, persisting timeframe-specific history
   useEffect(() => {
-    setCandles(generateInitialCandles(selectedPair));
-  }, [selectedPair]);
+    const storageKey = `chart_candles_${selectedPair.replace('/', '_')}_${timeframe}`;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCandles(parsed);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error loading candles from localStorage:', e);
+    }
+
+    const initial = generateInitialCandles(selectedPair, timeframe);
+    setCandles(initial);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(initial));
+    } catch (e) {}
+  }, [selectedPair, timeframe]);
+
+  // Continuously persist active candles state to localStorage per timeframe
+  useEffect(() => {
+    if (candles.length > 0) {
+      try {
+        const storageKey = `chart_candles_${selectedPair.replace('/', '_')}_${timeframe}`;
+        localStorage.setItem(storageKey, JSON.stringify(candles));
+      } catch (e) {
+        console.error('Error saving candles to localStorage:', e);
+      }
+    }
+  }, [candles, selectedPair, timeframe]);
 
   // Real-time market tick interval (fluctuates prices, updates candlesticks & open trades)
   useEffect(() => {
@@ -388,7 +477,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             const nextCandles = [...prevCandles];
             const last = nextCandles[nextCandles.length - 1];
 
-            if (nextCandles.length >= 28) {
+            if (nextCandles.length >= 120) {
               nextCandles.shift();
             }
 
@@ -445,7 +534,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           const newHigh = Math.max(item.high, newPrice);
           const newLow = Math.min(item.low, newPrice);
 
-          const baseOpen = pair === 'XAU/USD' ? 2330 : (pair === 'EUR/USD' ? 1.082 : (pair === 'GBP/USD' ? 1.261 : (pair === 'BTC/USD' ? 67000 : 156.0)));
+          const baseOpen = pair === 'XAU/USD' ? 4210 : (pair === 'EUR/USD' ? 1.082 : (pair === 'GBP/USD' ? 1.261 : (pair === 'BTC/USD' ? 67000 : 156.0)));
           const changePercent = Number(((newPrice - baseOpen) / baseOpen * 100).toFixed(2));
 
           next[pair as keyof typeof next] = {
@@ -939,6 +1028,9 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           </div>
         </div>
 
+        {/* Live Gold Market Ticker Feed */}
+        <MarketTicker />
+
         {/* MAIN VIEWPORT BODY */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden pb-16 custom-scrollbar">
           
@@ -1195,8 +1287,10 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                   chartType={chartType}
                   timeframe={timeframe}
                   candleTimerSeconds={candleTimerSeconds}
-                  height={220}
+                  height={360}
                   onCloseTrade={handleCloseTrade}
+                  onSelectTimeframe={setTimeframe}
+                  onToggleChartType={() => setChartType(prev => prev === 'candles' ? 'line' : 'candles')}
                 />
 
                 {/* Chart Toolbar Tools */}
@@ -1871,13 +1965,13 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               <div className="bg-[#090d16] border border-zinc-900 rounded-2xl p-4 text-center space-y-2 shadow-inner">
                 <span className="text-xs text-zinc-300 font-bold block">ناونیشانی جزدانی USDT فەرمی:</span>
                 <div className="flex flex-col items-center justify-center gap-2 bg-[#111622] border border-zinc-800 p-2.5 rounded-xl">
-                  <span className="text-[9.5px] font-mono font-black text-[#eab308] select-all tracking-wider break-all leading-relaxed">
-                    TY3B19j2dAdMinsUp983PocKetTrC20
+                  <span className="text-[10px] sm:text-xs font-mono font-black text-[#eab308] select-all tracking-wider break-all leading-relaxed">
+                    TNxFn1smwabHz8PREquhcChZiQNg8uGXxm
                   </span>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText('TY3B19j2dAdMinsUp983PocKetTrC20');
-                      showToast('ناونیشانی USDT کۆپی کرا!', 'success');
+                      navigator.clipboard.writeText('TNxFn1smwabHz8PREquhcChZiQNg8uGXxm');
+                      showToast('ناونیشانی USDT (TRC-20) کۆپی کرا!', 'success');
                     }}
                     className="px-4 py-1.5 bg-[#090d16] hover:bg-zinc-900 border border-zinc-800 rounded-lg text-[#eab308] transition-all text-xs font-bold flex items-center gap-1 cursor-pointer"
                   >
@@ -2131,6 +2225,9 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Live Gold Market Ticker Feed */}
+      <MarketTicker />
 
       {/* 2. MAIN MT4 RESPONSIVE GRID LAYOUT */}
       <div className="flex-1 p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
@@ -2853,13 +2950,13 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             <div className="bg-[#090d16] border border-zinc-900 rounded-2xl p-4 text-center space-y-2 shadow-inner">
               <span className="text-xs text-zinc-300 font-bold block">ناونیشانی جزدانی USDT فەرمی:</span>
               <div className="flex flex-col items-center justify-center gap-2 bg-[#111622] border border-zinc-800 p-2.5 rounded-xl">
-                <span className="text-[9.5px] font-mono font-black text-[#eab308] select-all tracking-wider break-all leading-relaxed">
-                  TY3B19j2dAdMinsUp983PocKetTrC20
+                <span className="text-[10px] sm:text-xs font-mono font-black text-[#eab308] select-all tracking-wider break-all leading-relaxed">
+                  TNxFn1smwabHz8PREquhcChZiQNg8uGXxm
                 </span>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText('TY3B19j2dAdMinsUp983PocKetTrC20');
-                    showToast('ناونیشانی USDT کۆپی کرا!', 'success');
+                    navigator.clipboard.writeText('TNxFn1smwabHz8PREquhcChZiQNg8uGXxm');
+                    showToast('ناونیشانی USDT (TRC-20) کۆپی کرا!', 'success');
                   }}
                   className="px-4 py-1.5 bg-[#090d16] hover:bg-zinc-900 border border-zinc-800 rounded-lg text-[#eab308] transition-all text-xs font-bold flex items-center gap-1 cursor-pointer"
                 >

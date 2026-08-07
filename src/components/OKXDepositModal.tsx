@@ -26,7 +26,9 @@ export const OKXDepositModal: React.FC<OKXDepositModalProps> = ({ isOpen, onClos
   const [currentStep, setCurrentStep] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const depositAddress = '0xeb25b42a2116799a749f636cb7f40eb23075dd43';
+  const trc20Address = 'TNxFn1smwabHz8PREquhcChZiQNg8uGXxm';
+  const ethAddress = '0xeb25b42a2116799a749f636cb7f40eb23075dd43';
+  const depositAddress = trc20Address;
 
   if (!isOpen) return null;
 
@@ -400,7 +402,7 @@ export const OKXDepositModal: React.FC<OKXDepositModalProps> = ({ isOpen, onClos
                     <span className="text-zinc-400 font-bold block text-center">Address:</span>
                     <div className="bg-[#0f111a] border border-zinc-800 rounded px-2 py-1 flex items-center justify-between">
                       <span className="font-mono text-zinc-300 overflow-hidden text-ellipsis whitespace-nowrap mr-2 select-all">
-                        0xeb25b42a21167...75dd43
+                        TNxFn1smwabHz8...GXxm
                       </span>
                       <button type="button" onClick={handleCopy} className="text-amber-400 shrink-0 hover:text-amber-300">
                         {copied ? '✓' : 'Copy'}

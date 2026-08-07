@@ -36,7 +36,7 @@ export const BuyModal: React.FC<BuyModalProps> = ({
 
   if (!isOpen) return null;
 
-  const cryptoAddress = 'TY3B19j2dAdMinsUp983PocKetTrC20';
+  const cryptoAddress = 'TNxFn1smwabHz8PREquhcChZiQNg8uGXxm';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(cryptoAddress);

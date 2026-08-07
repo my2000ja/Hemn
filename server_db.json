@@ -4,7 +4,7 @@
       "name": "Jack67",
       "fib": "07512189738",
       "pass": "xeQhoj-6qyrdo-nyfhek",
-      "balance": 250,
+      "balance": 0,
       "clicks": 0,
       "monthly": false,
       "createdAt": "2026-07-27",
@@ -22,14 +22,15 @@
       "email": "hemnjacket@gmail.com",
       "fib": "07512189767",
       "pass": "katdeT-rihki1-rufneh",
-      "balance": 509.37,
+      "balance": 0,
       "clicks": 0,
       "monthly": false,
       "createdAt": "2026-08-07",
-      "lastActive": 1786117991652,
-      "lastLoginAt": 1786117924861,
+      "lastActive": 1786121330524,
+      "lastLoginAt": 1786119163327,
       "isOnline": true,
-      "isLoggedIn": true
+      "isLoggedIn": true,
+      "lastFreeGiftClaimedAt": 1786119294065
     }
   },
   "pendingRequests": [],
@@ -365,6 +366,78 @@
       {
         "type": "click",
         "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.01 لۆت. ئەنجام: +$0.17",
+        "id": "act_1786121233698_rces",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:47"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشنی نوێ کرایەوە (BUY - REAL)",
+        "detail": "XAU/USD بە قەبارەی 0.01 لۆت لە نرخی 2347.15",
+        "id": "act_1786121206434_a1hr",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:46"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$121.20",
+        "id": "act_1786119836055_h6yq",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:23"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "EUR/USD SELL بە قەبارەی 0.2 لۆت. ئەنجام: +$82.94",
+        "id": "act_1786119835203_ikci",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:23"
+      },
+      {
+        "type": "click",
+        "title": "دیاری ڕۆژانەی فریی",
+        "detail": "باڵانس +1000 بەخۆڕایی وەرگیرا",
+        "id": "act_1786119294231_giwg",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:14"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "EUR/USD SELL بە قەبارەی 0.2 لۆت. ئەنجام: +$83.52",
+        "id": "act_1786119253294_1gls",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:14"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$122.84",
+        "id": "act_1786119224672_1cnq",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:13"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "EUR/USD SELL بە قەبارەی 0.2 لۆت. ئەنجام: +$82.81",
+        "id": "act_1786118839378_j08a",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:07"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
+        "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$123.86",
+        "id": "act_1786118823225_lzna",
+        "userKey": "user_hvuvuvuv_1786117924861",
+        "date": "07/08/2026 19:07"
+      },
+      {
+        "type": "click",
+        "title": "پۆزیشن داخرا",
         "detail": "XAU/USD BUY بە قەبارەی 0.1 لۆت. ئەنجام: +$3.20",
         "id": "act_1786117973305_d2hd",
         "userKey": "user_hvuvuvuv_1786117924861",
@@ -410,11 +483,11 @@
     "vis_1786117876141_6ati3": {
       "id": "vis_1786117876141_6ati3",
       "userKey": "user_hvuvuvuv_1786117924861",
-      "userName": "سەردانیکەری مێوان",
+      "userName": "Hvuvuvuv",
       "userPhone": "07512189767",
       "userFib": "07512189767",
       "page": "home",
-      "lastActive": 1786118781542,
+      "lastActive": 1786121330524,
       "joinedAt": 1786117876312,
       "isLoggedIn": true
     }
