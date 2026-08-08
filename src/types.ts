@@ -25,6 +25,8 @@ export interface User {
   verificationIdNumber?: string;
   verificationNote?: string;
   rewardPerClick?: number;
+  signalsUnlocked?: boolean;
+  signalsPending?: boolean;
 }
 
 export interface PendingRequest {

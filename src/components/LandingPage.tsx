@@ -42,7 +42,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenAuth }) => {
   // Simulated live prices for header ticker
   const [tickerPrices, setTickerPrices] = useState([
     { pair: 'XAU/USD', price: 4234.00, change: '+1.15%', isUp: true },
-    { pair: 'BTC/USD', price: 64230.00, change: '+2.40%', isUp: true },
+    { pair: 'BTC/USD', price: 65119.90, change: '+2.40%', isUp: true },
     { pair: 'EUR/USD', price: 1.0892, change: '-0.12%', isUp: false },
     { pair: 'GBP/USD', price: 1.2845, change: '+0.35%', isUp: true },
     { pair: 'USD/JPY', price: 154.60, change: '-0.28%', isUp: false },

