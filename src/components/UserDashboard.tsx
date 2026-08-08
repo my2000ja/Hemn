@@ -86,7 +86,7 @@ const generateInitialCandles = (pair: string, tf: string = '1m'): Candle[] => {
   if (pair === 'EUR/USD') { basePrice = 1.08435; baseTick = 0.00015; }
   else if (pair === 'GBP/USD') { basePrice = 1.26745; baseTick = 0.00020; }
   else if (pair === 'USD/JPY') { basePrice = 156.784; baseTick = 0.025; }
-  else if (pair === 'BTC/USD') { basePrice = 65119.90; baseTick = 12.50; }
+  else if (pair === 'BTC/USD') { basePrice = 67842.13; baseTick = 12.50; }
 
   let tfMultiplier = 1;
   let stepMinutes = 1;
@@ -224,39 +224,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
-  // VIP signals local view state & payment unlock status
+  // VIP signals local view state
   const [signalsList, setSignalsList] = useState<TradingSignal[]>([]);
-  const [signalsUnlocked, setSignalsUnlocked] = useState<boolean>(() => {
-    if (user.signalsUnlocked) return true;
-    try {
-      return localStorage.getItem(`signals_unlocked_${userKey}`) === 'true';
-    } catch {
-      return false;
-    }
-  });
-  const [signalsPending, setSignalsPending] = useState<boolean>(() => {
-    if (user.signalsPending) return true;
-    try {
-      return localStorage.getItem(`signals_pending_${userKey}`) === 'true';
-    } catch {
-      return false;
-    }
-  });
-  const [signalFibPhone, setSignalFibPhone] = useState(user.fib || user.verificationPhone || '');
-
-  // Keep VIP signals unlock synced with user props
-  useEffect(() => {
-    if (user.signalsUnlocked) {
-      setSignalsUnlocked(true);
-      setSignalsPending(false);
-      try {
-        localStorage.setItem(`signals_unlocked_${userKey}`, 'true');
-        localStorage.removeItem(`signals_pending_${userKey}`);
-      } catch {}
-    } else if (user.signalsPending) {
-      setSignalsPending(true);
-    }
-  }, [user.signalsUnlocked, user.signalsPending, userKey]);
 
   // Profile Form States
   const [editName, setEditName] = useState(user.name || '');
@@ -286,7 +255,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     'EUR/USD': { price: 1.08435, change: -0.23, high: 1.08620, low: 1.08110 },
     'GBP/USD': { price: 1.26745, change: 0.25, high: 1.27110, low: 1.26250 },
     'USD/JPY': { price: 156.784, change: 0.16, high: 157.250, low: 156.120 },
-    'BTC/USD': { price: 65119.90, change: 1.85, high: 65800.00, low: 64900.00 }
+    'BTC/USD': { price: 67842.13, change: 1.85, high: 68500.00, low: 67120.00 }
   });
 
   // Dynamic Candlestick State with lazy initialization for session continuity
@@ -1276,8 +1245,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                 </div>
               </div>
 
-              {/* INTERACTIVE LIVE CHART MODULE - Glassmorphism Pocket Option Aesthetic */}
-              <div className="bg-[#0f141d]/90 backdrop-blur-xl rounded-2xl p-4 border border-slate-700/50 shadow-2xl shadow-black/60 relative ring-1 ring-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+              {/* INTERACTIVE LIVE CHART MODULE */}
+              <div className="bg-[#111622] rounded-2xl p-4 border border-zinc-900/80 shadow-lg space-y-3">
                 
                 {/* Chart Header */}
                 <div className="flex items-center justify-between">
@@ -2423,8 +2392,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
         {/* CENTER COLUMN: LIVE INTERACTIVE MT4 CHART & QUICK TRADE ENGINE (lg:col-span-6) */}
         <div className="lg:col-span-6 space-y-4">
           
-          {/* Candle Chart panel - Pocket Option / MT5 Glassmorphism Desktop Style */}
-          <div className="bg-[#0f141d]/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-5 space-y-3.5 shadow-2xl shadow-black/70 relative ring-1 ring-white/10 overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+          {/* Candle Chart panel - Pocket Option Desktop Style */}
+          <div className="bg-[#111622] rounded-2xl border border-zinc-900/80 p-4 space-y-3 shadow-xl relative">
             
             {/* Pocket Option Top Asset Switcher Tabs */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-900/60 custom-scrollbar">

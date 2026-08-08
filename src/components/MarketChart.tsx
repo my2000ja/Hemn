@@ -53,7 +53,6 @@ export interface ActiveTrade {
   pnl: number;
   timestamp: string;
   accountType?: 'real' | 'demo';
-  isSignalTrade?: boolean;
 }
 
 export interface MarketChartProps {
@@ -123,7 +122,7 @@ const CandlestickShape = (props: any) => {
   const candleY = Math.min(yOpen, yClose);
   const candleHeight = Math.max(Math.abs(yOpen - yClose), 2);
 
-  const color = isBullish ? '#00e676' : '#ff325a'; // Neon Green for Bullish, Vivid Red for Bearish
+  const color = isBullish ? '#00b050' : '#ff3b30'; // MT5 Green for Bullish, MT5 Red for Bearish
 
   return (
     <g className="candlestick-item">
@@ -203,7 +202,7 @@ export const MarketChart: React.FC<MarketChartProps> = ({
   const [dragStartX, setDragStartX] = useState<number>(0);
   const [dragStartOffset, setDragStartOffset] = useState<number>(0);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const isLightTheme = false;
+  const [isLightTheme, setIsLightTheme] = useState<boolean>(true);
 
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -409,6 +408,30 @@ export const MarketChart: React.FC<MarketChartProps> = ({
 
           {/* Interactive Actions: Theme Toggle, Pan/Zoom, Fullscreen */}
           <div className="flex items-center gap-1 flex-wrap">
+            {/* Theme Toggle (Light MT5 vs Dark MT5) */}
+            <button
+              type="button"
+              onClick={() => setIsLightTheme((prev) => !prev)}
+              className={`px-2 py-1 rounded-lg border text-[10px] font-bold flex items-center gap-1.5 transition-all ${
+                isLightTheme
+                  ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
+                  : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white'
+              }`}
+              title="گۆڕینی دیزاین (Theme Switcher)"
+            >
+              {isLightTheme ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-600" />
+                  <span>MT5 Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-blue-400" />
+                  <span>MT5 Dark</span>
+                </>
+              )}
+            </button>
+
             {/* Zoom Controls */}
             <div className={`flex items-center gap-0.5 p-0.5 rounded-lg border ${
               isLightTheme ? 'bg-slate-100 border-slate-200' : 'bg-[#121824] border-zinc-800'
@@ -599,27 +622,27 @@ export const MarketChart: React.FC<MarketChartProps> = ({
                 <Line
                   type="monotone"
                   dataKey="close"
-                  stroke="#00e676"
-                  strokeWidth={2.5}
+                  stroke="#00a896"
+                  strokeWidth={2}
                   dot={false}
                   isAnimationActive={false}
                 />
               )}
 
-              {/* Live Current Price Reference Line with Pocket Option Glowing Pill */}
+              {/* Live Current Price Reference Line with MT5 Teal Pill */}
               {currentPrice && (
                 <ReferenceLine
                   y={currentPrice}
-                  stroke="#00e676"
-                  strokeDasharray="3 3"
+                  stroke={isLightTheme ? '#00a896' : '#00a896'}
+                  strokeDasharray="2 2"
                   strokeWidth={1.5}
                   label={{
-                    value: `▶ ${currentPrice.toFixed(precision)} | ${formatTimer(candleTimerSeconds)}`,
+                    value: `${currentPrice.toFixed(precision)} | ${formatTimer(candleTimerSeconds)}`,
                     position: 'right',
                     fill: '#ffffff',
                     fontSize: 9.5,
                     fontWeight: 'bold',
-                    className: 'font-mono bg-[#00e676] px-2 py-0.5 rounded text-slate-950 font-black shadow-md shadow-[#00e676]/30'
+                    className: 'font-mono bg-[#00a896] px-1.5 py-0.5 rounded text-white shadow-sm'
                   }}
                 />
               )}

@@ -369,10 +369,6 @@ export default function App() {
       if (targetUser) {
         const updatedUser = { ...targetUser };
         if (target.type === 'buy') {
-          if (target.title.includes('سیگناڵ') || target.title.includes('Signals') || target.title.includes('VIP')) {
-            updatedUser.signalsUnlocked = true;
-            updatedUser.signalsPending = false;
-          }
           updatedUser.balance = (updatedUser.balance || 0) + (target.amount || 0);
           if (target.clicks) {
             updatedUser.clicks = (updatedUser.clicks || 0) + target.clicks;
