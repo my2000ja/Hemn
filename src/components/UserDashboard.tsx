@@ -159,7 +159,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   showToast
 }) => {
   // View Modes: 'mobile' (perfect iPhone shell) vs 'desktop' (expanded terminal)
-  const [viewMode, setViewMode] = useState<'mobile' | 'desktop'>('mobile');
+  const [viewMode, setViewMode] = useState<'mobile' | 'desktop'>('desktop');
 
   // Active Account Type State: 'real' (هەژماری ڕاستەقینە) vs 'demo' (هەژماری تاقیکردنەوە - $10,000)
   const [accountType, setAccountType] = useState<'real' | 'demo'>(() => {

@@ -38,13 +38,33 @@ import { BuyModal } from './components/BuyModal';
 import { Toast } from './components/Toast';
 import { SupportBot } from './components/SupportBot';
 
+const DEFAULT_DEMO_USER: User = {
+  name: 'Jack VIP',
+  fib: '07501234567',
+  pass: 'demo1234',
+  clicks: 1000,
+  balance: 5214.85,
+  monthly: true,
+  vipPlanType: 'monthly',
+  createdAt: new Date().toISOString(),
+  isBanned: false,
+  verificationStatus: 'verified'
+};
+
 export default function App() {
   const [currentView, setCurrentViewRaw] = useState<'home' | 'history' | 'admin'>(() => {
     const saved = getSavedCurrentView();
     return saved === 'signals' ? 'home' : (saved as 'home' | 'history' | 'admin');
   });
-  const [currentUserKey, setCurrentUserKeyState] = useState<string | null>(null);
-  const [userData, setUserData] = useState<User | null>(null);
+  const [currentUserKey, setCurrentUserKeyState] = useState<string | null>(() => getCurrentUserKey() || 'jack_vip');
+  const [userData, setUserData] = useState<User | null>(() => {
+    const savedKey = getCurrentUserKey();
+    if (savedKey) {
+      const saved = getUserData(savedKey);
+      if (saved) return saved;
+    }
+    return DEFAULT_DEMO_USER;
+  });
   const [isAdminLoggedIn, setIsAdminLoggedInState] = useState<boolean>(getAdminLoggedIn());
   const [visitors, setVisitors] = useState<VisitorSession[]>([]);
 
@@ -113,11 +133,6 @@ export default function App() {
       if (savedKey) {
         const freshUser = serverUsers.find(u => u.key === savedKey)?.data;
         if (freshUser && !freshUser.isBanned) {
-          // Zero out real account balance if leftover from mock trades
-          if (freshUser.balance !== 0) {
-            freshUser.balance = 0;
-            saveUserData(savedKey, freshUser);
-          }
           setUserData(freshUser);
         } else if (freshUser?.isBanned || (!freshUser && serverUsers.length > 0)) {
           // Immediately kick out banned or deleted user
@@ -531,7 +546,7 @@ export default function App() {
       {/* Background ambient lighting */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-blue-600/15 via-emerald-500/10 to-transparent blur-3xl pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-5xl xl:max-w-6xl mx-auto space-y-5">
+      <div className="relative z-10 max-w-[1700px] mx-auto space-y-4">
         {/* Header */}
         <Header
           currentView={currentView}

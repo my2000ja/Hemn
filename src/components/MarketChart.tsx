@@ -254,11 +254,21 @@ export const MarketChart: React.FC<MarketChartProps> = ({
     return `${pair} Spot Market`;
   };
 
-  // Transform visible candles for Recharts
-  const chartData = visibleCandles.map((c) => {
+  // Transform visible candles for Recharts with MA indicators
+  const chartData = visibleCandles.map((c, i, arr) => {
     const isBullish = c.close >= c.open;
     const range = Math.abs(c.high - c.low);
     const volume = Math.max(12, Math.round(range * (isCrypto ? 80 : 1200) + (c.open * 100) % 40 + 15));
+
+    const slice20 = arr.slice(Math.max(0, i - 19), i + 1);
+    const ma20 = Number((slice20.reduce((acc, curr) => acc + curr.close, 0) / slice20.length).toFixed(precision));
+
+    const slice50 = arr.slice(Math.max(0, i - 49), i + 1);
+    const ma50 = Number((slice50.reduce((acc, curr) => acc + curr.close, 0) / slice50.length).toFixed(precision));
+
+    const slice200 = arr.slice(Math.max(0, i - 199), i + 1);
+    const ma200 = Number((slice200.reduce((acc, curr) => acc + curr.close, 0) / slice200.length).toFixed(precision));
+
     return {
       time: c.time,
       open: c.open,
@@ -268,6 +278,9 @@ export const MarketChart: React.FC<MarketChartProps> = ({
       isBullish,
       volume,
       barVal: Math.max(c.open, c.close),
+      ma20,
+      ma50,
+      ma200
     };
   });
 
@@ -585,6 +598,11 @@ export const MarketChart: React.FC<MarketChartProps> = ({
                 barSize={2.5}
                 isAnimationActive={false}
               />
+
+              {/* Moving Average Technical Overlay Lines (MA 20, MA 50, MA 200) */}
+              <Line type="monotone" dataKey="ma20" stroke="#00b050" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+              <Line type="monotone" dataKey="ma50" stroke="#ef4444" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+              <Line type="monotone" dataKey="ma200" stroke="#3b82f6" strokeWidth={1.5} dot={false} isAnimationActive={false} />
 
               {/* Candlesticks or Line */}
               {chartType === 'candles' ? (
