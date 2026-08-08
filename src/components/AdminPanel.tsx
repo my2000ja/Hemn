@@ -302,148 +302,177 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-5 text-right font-sans">
-      {/* Top KPI Cards Bar - High-Contrast Black, Blue & Green Theme */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+    <div className="w-full max-w-5xl mx-auto space-y-5 text-right font-sans">
+      {/* Premium Dark Header Bar */}
+      <div className="bg-gradient-to-r from-[#0C1425] via-[#0D182E] to-[#080E1A] border border-[#1B2942] rounded-2xl p-4 sm:p-5 shadow-2xl shadow-black/80 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-blue-600 p-0.5 shadow-lg shadow-blue-500/20">
+            <div className="w-full h-full bg-[#070D1B] rounded-[10px] flex items-center justify-center text-blue-400">
+              <ShieldAlert className="w-5 h-5 text-blue-400" />
+            </div>
+          </div>
+          <div>
+            <div className="text-white font-extrabold text-base sm:text-lg flex items-center gap-2">
+              <span>پانێڵی بەڕێوەبردنی سەرەکی</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>ئەکتیڤ</span>
+              </span>
+            </div>
+            <div className="text-slate-400 text-xs font-mono mt-0.5">
+              MR POCKET Admin Dashboard • کۆنتڕۆڵی گشتی سیستەم
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 bg-[#060C18] border border-[#1B2942] px-3 py-1.5 rounded-xl text-xs font-mono">
+          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-slate-300">ئەدمینی سیستەم:</span>
+          <span className="text-blue-400 font-bold">{settings.adminUser || 'hemn'}</span>
+        </div>
+      </div>
+
+      {/* Top KPI Cards Bar - High-Contrast Black, Blue & Red Fintech Theme */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div
           onClick={() => setActiveTab('visitors')}
-          className={`bg-[#050b14] border rounded-xl p-3 text-center shadow-lg transition-all cursor-pointer hover:border-blue-500/80 ${
+          className={`bg-[#0C1425] border rounded-2xl p-4 text-center shadow-xl transition-all cursor-pointer hover:border-blue-500/80 group ${
             activeTab === 'visitors'
-              ? 'border-blue-600 ring-2 ring-blue-600/40 bg-[#09152a]'
-              : 'border-blue-900/40'
+              ? 'border-blue-500 ring-2 ring-blue-500/30 bg-[#101A32] shadow-blue-950/50'
+              : 'border-[#1B2942] hover:bg-[#0E172B]'
           }`}
         >
-          <div className="flex items-center justify-center gap-1.5 mb-1">
+          <div className="flex items-center justify-center gap-1.5 mb-1.5">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
             </span>
-            <Activity className="w-4 h-4 text-blue-500" />
+            <Activity className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-zinc-400 text-[10px] font-mono uppercase font-bold">ئۆنلاین (۳۰ خولەک)</div>
-          <div className="text-lg font-mono font-black text-white">{online30MinVisitors.length} کەس</div>
+          <div className="text-slate-400 text-[10px] font-mono uppercase font-bold tracking-wider">ئۆنلاین (۳۰ خولەک)</div>
+          <div className="text-xl font-mono font-black text-white mt-0.5">{online30MinVisitors.length} <span className="text-xs font-normal text-slate-400">کەس</span></div>
         </div>
 
         <div
           onClick={() => setActiveTab('requests')}
-          className={`bg-[#050b14] border rounded-xl p-3 text-center shadow-lg cursor-pointer transition-all hover:border-blue-500/80 ${
+          className={`bg-[#0C1425] border rounded-2xl p-4 text-center shadow-xl cursor-pointer transition-all hover:border-red-500/80 group ${
             activeTab === 'requests'
-              ? 'border-blue-600 ring-2 ring-blue-600/40 bg-[#09152a]'
-              : 'border-blue-900/40'
+              ? 'border-red-500 ring-2 ring-red-500/30 bg-[#161222] shadow-red-950/50'
+              : 'border-[#1B2942] hover:bg-[#0E172B]'
           }`}
         >
-          <Clock className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
-          <div className="text-zinc-400 text-[10px] font-mono uppercase font-bold">داواکاری چاوەڕوانکراو</div>
-          <div className="text-lg font-mono font-black text-white">{pendingCount}</div>
+          <Clock className="w-4 h-4 text-red-400 mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+          <div className="text-slate-400 text-[10px] font-mono uppercase font-bold tracking-wider">داواکاری چاوەڕوانکراو</div>
+          <div className="text-xl font-mono font-black text-red-400 mt-0.5">{pendingCount}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('users')}
-          className={`bg-[#050b14] border rounded-xl p-3 text-center shadow-lg cursor-pointer transition-all hover:border-blue-500/80 ${
+          className={`bg-[#0C1425] border rounded-2xl p-4 text-center shadow-xl cursor-pointer transition-all hover:border-blue-500/80 group ${
             activeTab === 'users'
-              ? 'border-blue-600 ring-2 ring-blue-600/40 bg-[#09152a]'
-              : 'border-blue-900/40'
+              ? 'border-blue-500 ring-2 ring-blue-500/30 bg-[#101A32] shadow-blue-950/50'
+              : 'border-[#1B2942] hover:bg-[#0E172B]'
           }`}
         >
-          <Users className="w-4 h-4 text-blue-400 mx-auto mb-1" />
-          <div className="text-zinc-400 text-[10px] font-mono uppercase font-bold">سەرجەم بەکارهێنەران</div>
-          <div className="text-lg font-mono font-black text-white">{allUsers.length}</div>
+          <Users className="w-4 h-4 text-blue-400 mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+          <div className="text-slate-400 text-[10px] font-mono uppercase font-bold tracking-wider">سەرجەم بەکارهێنەران</div>
+          <div className="text-xl font-mono font-black text-white mt-0.5">{allUsers.length}</div>
         </div>
 
         {/* 4th Card: Admin Profit/Loss Vault Balance */}
         <div
           onClick={() => setActiveTab('settings')}
-          className={`bg-gradient-to-br from-[#061226] via-[#030914] to-[#000000] border rounded-xl p-3 text-center shadow-xl shadow-blue-950/40 cursor-pointer transition-all hover:border-emerald-500 group ${
+          className={`bg-gradient-to-br from-[#0D182E] via-[#091122] to-[#050A14] border rounded-2xl p-4 text-center shadow-xl shadow-black/60 cursor-pointer transition-all hover:border-emerald-500 group ${
             activeTab === 'settings'
-              ? 'border-emerald-500 ring-2 ring-emerald-500/50 bg-[#051829]'
-              : 'border-blue-800/60'
+              ? 'border-emerald-500 ring-2 ring-emerald-500/40 bg-[#0A1A2E]'
+              : 'border-[#1B2942]'
           }`}
         >
-          <div className="flex items-center justify-center gap-1 mb-1">
+          <div className="flex items-center justify-center gap-1 mb-1.5">
             <DollarSign className="w-4 h-4 text-emerald-400 animate-pulse group-hover:scale-125 transition-transform" />
           </div>
-          <div className="text-emerald-400/90 text-[10px] font-mono font-bold uppercase tracking-tight">باڵانسی ئەدمین ($ زەرەری یاری)</div>
-          <div className="text-base sm:text-lg font-mono font-black text-white drop-shadow">
+          <div className="text-emerald-400/90 text-[10px] font-mono font-bold uppercase tracking-tight">باڵانسی خەزێنە (زەرەری یاری)</div>
+          <div className="text-lg sm:text-xl font-mono font-black text-white drop-shadow mt-0.5">
             ${(settings.adminVaultBalance || 0).toLocaleString()}
           </div>
         </div>
       </div>
 
-      {/* Admin Tab Navigation - Black, Blue, Emerald Theme */}
-      <div className="flex bg-[#040914] border border-blue-900/40 p-1.5 rounded-xl gap-1 text-xs font-bold text-zinc-300 overflow-x-auto shadow-md">
+      {/* Admin Tab Navigation */}
+      <div className="flex bg-[#070D1B] border border-[#1B2942] p-1.5 rounded-2xl gap-1.5 text-xs font-bold text-slate-300 overflow-x-auto shadow-2xl backdrop-blur-md">
         <button
           onClick={() => setActiveTab('visitors')}
-          className={`flex-1 py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+          className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'visitors'
-              ? 'bg-blue-600 text-white font-black shadow-lg shadow-blue-950/60'
-              : 'hover:bg-blue-950/30 text-zinc-300 hover:text-white'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white font-extrabold shadow-lg shadow-blue-600/30 border border-blue-400/30'
+              : 'hover:bg-[#0D172B] text-slate-400 hover:text-white'
           }`}
         >
-          <Activity className="w-3.5 h-3.5 text-white" />
+          <Activity className="w-4 h-4 text-blue-400" />
           <span>سەردانیکەران ({online30MinVisitors.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('requests')}
-          className={`flex-1 py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+          className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'requests'
-              ? 'bg-blue-600 text-white font-black shadow-lg shadow-blue-950/60'
-              : 'hover:bg-blue-950/30 text-zinc-300 hover:text-white'
+              ? 'bg-gradient-to-r from-red-600 to-red-700 text-white font-extrabold shadow-lg shadow-red-600/30 border border-red-400/30'
+              : 'hover:bg-[#0D172B] text-slate-400 hover:text-white'
           }`}
         >
-          <Clock className="w-3.5 h-3.5 text-white" />
+          <Clock className="w-4 h-4 text-red-400" />
           <span>داواکارییەکان ({pendingCount})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('users')}
-          className={`flex-1 py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+          className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'users'
-              ? 'bg-blue-600 text-white font-black shadow-lg shadow-blue-950/60'
-              : 'hover:bg-blue-950/30 text-zinc-300 hover:text-white'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white font-extrabold shadow-lg shadow-blue-600/30 border border-blue-400/30'
+              : 'hover:bg-[#0D172B] text-slate-400 hover:text-white'
           }`}
         >
-          <Users className="w-3.5 h-3.5 text-white" />
+          <Users className="w-4 h-4 text-blue-400" />
           <span>بەکارهێنەران ({allUsers.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('settings')}
-          className={`flex-1 py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+          className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'settings'
-              ? 'bg-blue-600 text-white font-black shadow-lg shadow-blue-950/60'
-              : 'hover:bg-blue-950/30 text-zinc-300 hover:text-white'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white font-extrabold shadow-lg shadow-blue-600/30 border border-blue-400/30'
+              : 'hover:bg-[#0D172B] text-slate-400 hover:text-white'
           }`}
         >
-          <Settings className="w-3.5 h-3.5 text-white" />
+          <Settings className="w-4 h-4 text-slate-300" />
           <span>ڕێکخستن</span>
         </button>
       </div>
 
       {/* 1. VISITORS & ONLINE USERS TAB */}
       {activeTab === 'visitors' && (
-        <div className="bg-[#040914] border border-blue-900/40 rounded-xl p-5 shadow-xl space-y-4">
-          <div className="flex flex-wrap items-center justify-between border-b border-blue-950 pb-3 gap-2">
+        <div className="bg-[#0C1425] border border-[#1B2942] rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+          <div className="flex flex-wrap items-center justify-between border-b border-[#1B2942] pb-4 gap-3">
             <div>
-              <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide">
+              <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
                 <Globe className="w-4 h-4 text-blue-400" />
                 <span>سەردانیکەران و چالاکیی ٣٠ خولەکی ڕابردوو</span>
               </h3>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
+              <p className="text-[11px] text-slate-400 mt-0.5">
                 تۆماری ئۆنلاینی ئەم بەکار‌هێنەرانەی لە ۳۰ خولەکی دواییدا داخل بوون یاخود سەردانیان کردووە
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-mono bg-blue-950/80 text-white px-3 py-1 rounded-lg border border-blue-600/60 font-bold flex items-center gap-1.5 shadow">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span className="text-xs font-mono bg-blue-950/80 text-blue-300 px-3 py-1 rounded-xl border border-blue-500/40 font-bold flex items-center gap-1.5 shadow">
+                <span className="h-2 w-2 rounded-full bg-blue-400 animate-ping"></span>
                 <span>{online30MinVisitors.length} ئەکتیڤ ئۆنلاین</span>
               </span>
 
               {onDeleteAllUsers && (
                 <button
                   onClick={() => setConfirmDeleteScope('logged')}
-                  className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all cursor-pointer shadow flex items-center gap-1 border border-blue-400"
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg shadow-blue-600/20 flex items-center gap-1.5 border border-blue-400/30"
                   title="سڕینەوەی گشتی سەرجەم بەکارهێنەرانی داخلبوو"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -454,7 +483,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {onClearVisitors && visitors.length > 0 && (
                 <button
                   onClick={onClearVisitors}
-                  className="px-2.5 py-1 bg-blue-950 hover:bg-blue-900 text-blue-200 border border-blue-800 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                  className="px-3 py-1.5 bg-[#070D1B] hover:bg-[#101A32] text-slate-300 border border-[#1B2942] rounded-xl text-xs font-bold transition-all cursor-pointer"
                   title="سڕینەوەی لۆگی سەردانیکەران"
                 >
                   سڕینەوەی لۆگ
@@ -464,39 +493,39 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           {/* Search Box & Visitor Filters */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div className="relative">
-              <Search className="w-4 h-4 text-zinc-500 absolute right-3 top-2.5 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-500 absolute right-3 top-2.5 pointer-events-none" />
               <input
                 type="text"
                 value={visitorSearch}
                 onChange={(e) => setVisitorSearch(e.target.value)}
                 placeholder="گەڕان بەدوای ناوی سەردانیکەر، موبایل، یان لاپەڕە..."
-                className="w-full bg-[#071124] border border-blue-900/50 pr-10 pl-3 py-2 rounded-lg text-white text-xs outline-none focus:border-blue-500 font-mono"
+                className="w-full bg-[#070D1B] border border-[#1B2942] pr-10 pl-3 py-2 rounded-xl text-white text-xs outline-none focus:border-blue-500 font-mono transition-colors"
               />
             </div>
 
-            <div className="flex gap-1 bg-[#071124] p-1 rounded-lg border border-blue-900/50 text-xs font-mono">
+            <div className="flex gap-1 bg-[#070D1B] p-1 rounded-xl border border-[#1B2942] text-xs font-mono">
               <button
                 onClick={() => setVisitorFilter('all')}
-                className={`flex-1 py-1 rounded transition-all font-bold ${
-                  visitorFilter === 'all' ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 py-1 rounded-lg transition-all font-bold ${
+                  visitorFilter === 'all' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 هەمووی ({visitors.length})
               </button>
               <button
                 onClick={() => setVisitorFilter('logged')}
-                className={`flex-1 py-1 rounded transition-all font-bold ${
-                  visitorFilter === 'logged' ? 'bg-emerald-600 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 py-1 rounded-lg transition-all font-bold ${
+                  visitorFilter === 'logged' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 🔓 داخلبووان ({visitors.filter((v) => v.isLoggedIn || v.userKey).length})
               </button>
               <button
                 onClick={() => setVisitorFilter('guest')}
-                className={`flex-1 py-1 rounded transition-all font-bold ${
-                  visitorFilter === 'guest' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 py-1 rounded-lg transition-all font-bold ${
+                  visitorFilter === 'guest' ? 'bg-[#16233B] text-slate-200' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 ⚪ مێوانەکان ({visitors.filter((v) => !v.isLoggedIn && !v.userKey).length})
@@ -505,11 +534,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           {filteredVisitors.length === 0 ? (
-            <div className="text-center py-10 text-zinc-500 text-xs font-mono border border-dashed border-red-900/40 rounded-xl">
+            <div className="text-center py-10 text-slate-500 text-xs font-mono border border-dashed border-[#1B2942] rounded-2xl">
               هیچ سەردانیکەرێک لە لۆگدا تۆمار نەکراوە.
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {filteredVisitors.map((vis) => {
                 const isOnline30Min = (now - vis.lastActive) <= 30 * 60 * 1000;
                 const isUserLogged = Boolean(vis.isLoggedIn || vis.userKey);
@@ -521,20 +550,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 return (
                   <div
                     key={vis.id}
-                    className={`bg-[#0a0305] border p-3.5 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs transition-all ${
+                    className={`bg-[#070D1B] border p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs transition-all hover:border-blue-500/50 ${
                       isOnline30Min
-                        ? 'border-red-600/70 shadow-md shadow-red-950/30'
-                        : 'border-red-950/60 opacity-80'
+                        ? 'border-blue-500/60 shadow-lg shadow-blue-950/30'
+                        : 'border-[#1B2942] opacity-80'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center font-black font-mono text-xs ${
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-black font-mono text-xs shadow-inner ${
                           isUserLogged
-                            ? 'bg-red-600 text-white border border-red-400'
+                            ? 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white border border-blue-400/50'
                             : isOnline30Min
-                            ? 'bg-red-950/80 text-red-300 border border-red-700'
-                            : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                            ? 'bg-blue-950/80 text-blue-300 border border-blue-700/60'
+                            : 'bg-slate-800 text-slate-400 border border-slate-700'
                         }`}
                       >
                         {vis.userName ? vis.userName.substring(0, 1).toUpperCase() : 'V'}
@@ -542,44 +571,44 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                       <div>
                         <div className="font-bold text-white flex items-center gap-2 flex-wrap">
-                          <span>{vis.userName || 'سەردانیکەری مێوان'}</span>
+                          <span className="text-sm">{vis.userName || 'سەردانیکەری مێوان'}</span>
                           {isUserLogged ? (
-                            <span className="text-[10px] font-mono font-bold text-white bg-red-600 px-2 py-0.5 rounded border border-red-500 flex items-center gap-1 shadow">
-                              🔓 ئەکاونتی داخلبوو
+                            <span className="text-[10px] font-mono font-bold text-white bg-blue-600/90 px-2.5 py-0.5 rounded-full border border-blue-400/50 flex items-center gap-1 shadow">
+                              🔓 داخلبوو
                             </span>
                           ) : (
-                            <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
-                              ⚪ سەردانیکەری مێوان
+                            <span className="text-[10px] font-mono text-slate-400 bg-slate-900 px-2.5 py-0.5 rounded-full border border-slate-800">
+                              ⚪ مێوان
                             </span>
                           )}
 
                           {isOnline30Min ? (
-                            <span className="text-[10px] font-mono font-bold text-white bg-red-950/90 px-2 py-0.5 rounded border border-red-600/60 flex items-center gap-1">
-                              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                            <span className="text-[10px] font-mono font-bold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-600/50 flex items-center gap-1">
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                               <span>ئۆنلاین</span>
                             </span>
                           ) : (
-                            <span className="text-[10px] font-mono text-zinc-400 bg-[#120709] px-2 py-0.5 rounded border border-red-950">
+                            <span className="text-[10px] font-mono text-slate-500 bg-[#030712] px-2 py-0.5 rounded-full border border-slate-900">
                               ئۆفلاین
                             </span>
                           )}
                         </div>
 
-                        <div className="text-zinc-400 text-[11px] font-mono mt-0.5 flex flex-wrap gap-2">
+                        <div className="text-slate-400 text-[11px] font-mono mt-1 flex flex-wrap gap-3">
                           {vis.userPhone && (
-                            <span>📱 موبایل: <strong className="text-white">{vis.userPhone}</strong></span>
+                            <span>📱 موبایل: <strong className="text-slate-200">{vis.userPhone}</strong></span>
                           )}
                           {vis.userFib && (
-                            <span>💳 FIB: <strong className="text-red-400">{vis.userFib}</strong></span>
+                            <span>💳 FIB: <strong className="text-blue-400">{vis.userFib}</strong></span>
                           )}
-                          <span>📍 لاپەڕە: <strong className="text-red-400">{pageLabel}</strong></span>
+                          <span>📍 لاپەڕە: <strong className="text-cyan-400">{pageLabel}</strong></span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="text-left font-mono text-[11px] text-zinc-400 border-r border-red-950 pr-3 sm:border-r-0 sm:pr-0">
+                    <div className="text-left font-mono text-[11px] text-slate-400 border-r border-[#1B2942] pr-3 sm:border-r-0 sm:pr-0">
                       <div>دوا چالاکی: <strong className="text-white">{getTimeAgoText(vis.lastActive)}</strong></div>
-                      <div className="text-[10px] text-zinc-500 mt-0.5">
+                      <div className="text-[10px] text-slate-500 mt-0.5">
                         کاتی هاتن: {new Date(vis.joinedAt || vis.lastActive).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -593,51 +622,51 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* 2. REQUESTS QUEUE TAB */}
       {activeTab === 'requests' && (
-        <div className="bg-[#070203] border border-red-900/40 rounded-xl p-5 shadow-xl space-y-4">
-          <div className="flex flex-wrap items-center justify-between border-b border-red-950 pb-3 gap-2">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide">
+        <div className="bg-[#0C1425] border border-[#1B2942] rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+          <div className="flex flex-wrap items-center justify-between border-b border-[#1B2942] pb-4 gap-3">
+            <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2 uppercase tracking-wide">
               <Clock className="w-4 h-4 text-red-500" />
               <span>داواکارییەکانی موبایل و پسولەی پارەدان</span>
             </h3>
-            <span className="text-xs font-mono bg-red-950/80 text-white px-2.5 py-1 rounded border border-red-600/60 font-bold shadow">
+            <span className="text-xs font-mono bg-red-950/80 text-red-300 px-3 py-1 rounded-xl border border-red-600/50 font-bold shadow">
               {pendingCount} داواکاری لە چاوەڕوانیدایە
             </span>
           </div>
 
           {/* Search Box and Filter Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div className="relative">
-              <Search className="w-4 h-4 text-zinc-500 absolute right-3 top-2.5 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-500 absolute right-3 top-2.5 pointer-events-none" />
               <input
                 type="text"
                 value={requestSearch}
                 onChange={(e) => setRequestSearch(e.target.value)}
                 placeholder="گەڕان لە داواکارییەکان (ناو، موبایل، FIB، ID)..."
-                className="w-full bg-[#0d0406] border border-red-900/50 pr-10 pl-3 py-2 rounded-lg text-white text-xs outline-none focus:border-red-500 font-mono"
+                className="w-full bg-[#070D1B] border border-[#1B2942] pr-10 pl-3 py-2 rounded-xl text-white text-xs outline-none focus:border-red-500 font-mono transition-colors"
               />
             </div>
 
-            <div className="flex flex-wrap gap-1.5 bg-[#0d0406] p-1 rounded-lg border border-red-900/50 text-xs font-mono">
+            <div className="flex flex-wrap gap-1 bg-[#070D1B] p-1 rounded-xl border border-[#1B2942] text-xs font-mono">
               <button
                 onClick={() => setRequestTypeFilter('all')}
-                className={`flex-1 min-w-[70px] py-1 px-2 rounded transition-all font-bold ${
-                  requestTypeFilter === 'all' ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 min-w-[70px] py-1 px-2 rounded-lg transition-all font-bold ${
+                  requestTypeFilter === 'all' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 هەمووی ({pendingRequests.length})
               </button>
               <button
                 onClick={() => setRequestTypeFilter('buy')}
-                className={`flex-1 min-w-[90px] py-1 px-2 rounded transition-all font-bold ${
-                  requestTypeFilter === 'buy' ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 min-w-[90px] py-1 px-2 rounded-lg transition-all font-bold ${
+                  requestTypeFilter === 'buy' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 کڕین (VIP)
               </button>
               <button
                 onClick={() => setRequestTypeFilter('withdraw')}
-                className={`flex-1 min-w-[90px] py-1 px-2 rounded transition-all font-bold ${
-                  requestTypeFilter === 'withdraw' ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'
+                className={`flex-1 min-w-[90px] py-1 px-2 rounded-lg transition-all font-bold ${
+                  requestTypeFilter === 'withdraw' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 ڕاکێشان
@@ -646,66 +675,66 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           {/* Sub-Filters for Status */}
-          <div className="flex flex-wrap gap-1.5 bg-[#0d0406] p-1.5 rounded-lg border border-red-900/50 text-xs font-mono">
+          <div className="flex flex-wrap gap-1.5 bg-[#070D1B] p-1.5 rounded-xl border border-[#1B2942] text-xs font-mono">
             <button
               onClick={() => setRequestStatusFilter('pending')}
-              className={`px-3 py-1 rounded-md transition-all font-bold flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg transition-all font-bold flex items-center gap-1.5 ${
                 requestStatusFilter === 'pending'
-                  ? 'bg-red-600 text-white shadow'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30 border border-red-400/30'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <span>چاوەڕوانکراو</span>
-              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded">
+              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full font-bold">
                 {pendingRequests.filter((r) => r.status === 'pending').length}
               </span>
             </button>
 
             <button
               onClick={() => setRequestStatusFilter('approved')}
-              className={`px-3 py-1 rounded-md transition-all font-bold flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg transition-all font-bold flex items-center gap-1.5 ${
                 requestStatusFilter === 'approved'
-                  ? 'bg-red-700 text-white shadow'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 border border-emerald-400/30'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <span>پەسەندکراو</span>
-              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded">
+              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full font-bold">
                 {pendingRequests.filter((r) => r.status === 'approved').length}
               </span>
             </button>
 
             <button
               onClick={() => setRequestStatusFilter('rejected')}
-              className={`px-3 py-1 rounded-md transition-all font-bold flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg transition-all font-bold flex items-center gap-1.5 ${
                 requestStatusFilter === 'rejected'
                   ? 'bg-red-950 text-red-300 border border-red-800'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <span>ڕەتکراوە</span>
-              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded">
+              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full font-bold">
                 {pendingRequests.filter((r) => r.status === 'rejected').length}
               </span>
             </button>
 
             <button
               onClick={() => setRequestStatusFilter('all')}
-              className={`px-3 py-1 rounded-md transition-all font-bold flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg transition-all font-bold flex items-center gap-1.5 ${
                 requestStatusFilter === 'all'
-                  ? 'bg-zinc-800 text-white shadow'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-[#16233B] text-white'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <span>هەمووی</span>
-              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded">
+              <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full font-bold">
                 {pendingRequests.length}
               </span>
             </button>
           </div>
 
           {filteredRequests.length === 0 ? (
-            <div className="text-center py-10 text-zinc-500 text-xs font-mono border border-dashed border-red-900/40 rounded-xl">
+            <div className="text-center py-10 text-slate-500 text-xs font-mono border border-dashed border-[#1B2942] rounded-2xl">
               هیچ داواکارییەکی لەم جۆرە لە لیستەکەدا نییە.
             </div>
           ) : (
@@ -716,47 +745,47 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 return (
                   <div
                     key={req.id}
-                    className={`bg-[#0a0305] border p-4 rounded-xl space-y-3 text-xs transition-all ${
+                    className={`bg-[#070D1B] border p-4.5 rounded-2xl space-y-3 text-xs transition-all hover:border-red-500/50 ${
                       isVipBuy
-                        ? 'border-red-600 shadow-lg shadow-red-950/30'
-                        : 'border-red-950/60'
+                        ? 'border-red-500/80 shadow-xl shadow-red-950/30 bg-gradient-to-r from-[#0C1425] to-[#140A18]'
+                        : 'border-[#1B2942]'
                     }`}
                   >
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-red-950 pb-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1B2942] pb-3">
                       <div>
-                        <div className="font-bold text-white text-sm flex items-center gap-2 flex-wrap">
+                        <div className="font-bold text-white text-sm sm:text-base flex items-center gap-2 flex-wrap">
                           <span>{req.userName}</span>
                           {isVipBuy ? (
-                            <span className="text-[11px] font-mono font-bold text-white bg-red-600 px-2.5 py-0.5 rounded border border-red-500 flex items-center gap-1 shadow">
-                              <Star className="w-3 h-3 fill-white text-white" />
+                            <span className="text-[11px] font-mono font-bold text-white bg-gradient-to-r from-red-600 to-red-700 px-3 py-0.5 rounded-full border border-red-400/50 flex items-center gap-1 shadow-md shadow-red-900/40">
+                              <Star className="w-3.5 h-3.5 fill-white text-white" />
                               <span>{req.title} (⭐ VIP)</span>
                             </span>
                           ) : (
-                            <span className="text-[11px] font-mono font-bold text-red-300 bg-[#150608] px-2.5 py-0.5 rounded border border-red-900/60">
+                            <span className="text-[11px] font-mono font-bold text-red-300 bg-red-950/80 px-2.5 py-0.5 rounded-full border border-red-800/60">
                               {req.title}
                             </span>
                           )}
                         </div>
-                        <div className="text-zinc-400 text-[10px] font-mono mt-0.5">
+                        <div className="text-slate-400 text-[10px] font-mono mt-1">
                           کاتی ناردن: {req.date}
                         </div>
                       </div>
 
-                      <div className="text-left font-mono font-bold text-white text-sm bg-red-950/90 px-3 py-1 rounded border border-red-600/50">
+                      <div className="text-left font-mono font-extrabold text-white text-sm sm:text-base bg-blue-950/90 px-3.5 py-1.5 rounded-xl border border-blue-500/50 shadow-inner">
                         {req.amount.toLocaleString()}
                       </div>
                     </div>
 
                     {/* Payment Receipt Box */}
-                    <div className="bg-[#100407] border border-red-900/60 rounded-lg p-3 space-y-1.5 text-xs">
-                      <div className="text-red-400 font-bold text-[11px] flex items-center justify-between">
-                        <span>📜 پسولەی پارەدان لە موبایلەوە:</span>
-                        <span className="font-mono text-[10px] bg-red-950 text-white px-2 py-0.5 rounded border border-red-800">
+                    <div className="bg-[#050A14] border border-[#1B2942] rounded-xl p-3.5 space-y-2 text-xs">
+                      <div className="text-red-400 font-bold text-xs flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">📜 پسولەی پارەدان لە موبایلەوە:</span>
+                        <span className="font-mono text-[10px] bg-red-950/90 text-white px-2.5 py-0.5 rounded-md border border-red-800">
                           ID: {req.receiptRef || `REC-${req.id}`}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-zinc-300 pt-1 font-mono text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 pt-1 font-mono text-[11px]">
                         <div>
                           📱 موبایلی نێرەر: <strong className="text-white">{req.userPhone || req.userFib || 'دیاری نەکراوە'}</strong>
                         </div>
@@ -766,8 +795,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
 
                       {req.receiptNote && (
-                        <div className="text-[11px] text-zinc-400 pt-1 border-t border-red-950 mt-1">
-                          📝 تێبینی پسولە: <span className="text-zinc-200">{req.receiptNote}</span>
+                        <div className="text-[11px] text-slate-400 pt-2 border-t border-[#1B2942] mt-1">
+                          📝 تێبینی پسولە: <span className="text-slate-200">{req.receiptNote}</span>
                         </div>
                       )}
                     </div>
@@ -776,19 +805,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
                       <div>
                         {req.status === 'approved' && (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-white bg-red-600 border border-red-500 px-3 py-1 rounded-lg shadow">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-emerald-600 border border-emerald-400 px-3 py-1 rounded-xl shadow-md">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>پەسەندکراوە</span>
                           </span>
                         )}
                         {req.status === 'rejected' && (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-red-300 bg-red-950 border border-red-800 px-3 py-1 rounded-lg">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-red-300 bg-red-950 border border-red-800 px-3 py-1 rounded-xl">
                             <XCircle className="w-3.5 h-3.5" />
                             <span>ڕەتکراوەتەوە</span>
                           </span>
                         )}
                         {req.status === 'pending' && (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-white bg-red-950 border border-red-600/70 px-3 py-1 rounded-lg">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-red-950 border border-red-600/70 px-3 py-1 rounded-xl">
                             <Clock className="w-3.5 h-3.5 text-red-500 animate-pulse" />
                             <span>لە چاوەڕوانیدایە</span>
                           </span>
@@ -799,7 +828,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => onApproveRequest(req.id)}
-                            className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg text-xs flex items-center gap-1.5 shadow transition-all cursor-pointer"
+                            className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold py-2 px-4 rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-950/50 transition-all cursor-pointer border border-emerald-400/40"
                           >
                             <CheckCircle2 className="w-4 h-4" />
                             <span>پەسەندکردنی پسولە</span>
@@ -807,7 +836,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                           <button
                             onClick={() => onRejectRequest(req.id)}
-                            className="bg-red-950 hover:bg-red-900 text-red-200 font-bold py-2 px-4 rounded-lg text-xs flex items-center gap-1.5 border border-red-800 transition-all cursor-pointer"
+                            className="bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-xl text-xs flex items-center gap-1.5 border border-red-500/40 transition-all cursor-pointer shadow-lg shadow-red-950/50"
                           >
                             <XCircle className="w-4 h-4" />
                             <span>ڕەتکردنەوە</span>
