@@ -1388,7 +1388,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
                       <div className="flex items-center gap-1 text-[10px]">
                         <span className="text-zinc-500">زیاتکردنی خێرا:</span>
-                        {[5000, 10000, 25000].map((amt) => (
+                        {[5000, 10000, 15000, 20000, 25000].map((amt) => (
                           <button
                             key={amt}
                             onClick={() => {

@@ -290,12 +290,22 @@ export default function App() {
   const handleSubmitWithdrawRequest = (fibNumber: string, amount: number) => {
     if (!currentUserKey || !userData) return;
 
-    if (amount > 1000) {
+    let usdAmt = amount;
+    if (amount >= 10000) {
+      usdAmt = Math.round(amount / 1500);
+    }
+
+    if (usdAmt < 10 && amount < 15000) {
+      showToast('کەمترین بڕی پارە بۆ ڕاکێشانەوە ١٥,٠٠٠ دینارە ($10)!', 'error');
+      return;
+    }
+
+    if (usdAmt > 1000) {
       showToast('زۆرترین بڕی پارە بۆ ڕاکێشانەوە ۱,۰۰۰ دۆلارە ($1,000)!', 'error');
       return;
     }
 
-    // Check weekly withdrawal count limit (max 5 per week)
+    // Check weekly withdrawal count limit (max 2 per week)
     const now = Date.now();
     const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
     let currentWeeklyCount = userData.weeklyWithdrawalCount || 0;
@@ -306,8 +316,8 @@ export default function App() {
       resetTime = now + ONE_WEEK_MS;
     }
 
-    if (currentWeeklyCount >= 5) {
-      showToast('سنوورداری ڕاکێشانەوە: تەنها ٥ جار ڕێگەپێدراوە لە هەفتەیەکدا! لە هەفتەی تازە دەتوانیت دیسان پارە بکێشیتەوە.', 'error');
+    if (currentWeeklyCount >= 2) {
+      showToast('سنوورداری ڕاکێشانەوە: لە هەفتەیەکدا تەنها ۲ جار ڕێگەپێدراوە پارە بکێشیتەوە!', 'error');
       return;
     }
 

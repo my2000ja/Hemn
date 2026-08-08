@@ -241,7 +241,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
 
   // Deposit States
   const [depositMethod, setDepositMethod] = useState<'FIB' | 'USDT'>('FIB');
-  const [depositAmountIQD, setDepositAmountIQD] = useState<number>(50000);
+  const [depositAmountIQD, setDepositAmountIQD] = useState<number>(10000);
   const [depositSenderFib, setDepositSenderFib] = useState<string>('');
   const [depositReceiptRef, setDepositReceiptRef] = useState<string>('');
   const [depositNote, setDepositNote] = useState<string>('');
@@ -623,16 +623,44 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
       showToast('تکایە بڕی پارە بەدروستی بنووسە!', 'error');
       return;
     }
-    if (amt > 1000) {
+
+    // Check minimum 15,000 IQD / $10
+    let usdAmt = amt;
+    if (amt >= 10000) {
+      usdAmt = Math.round(amt / 1500);
+    }
+    if (usdAmt < 10 && amt < 15000) {
+      showToast('کەمترین بڕی پارە بۆ ڕاکێشانەوە ١٥,٠٠٠ دینارە ($10)!', 'error');
+      return;
+    }
+
+    if (usdAmt > 1000) {
       showToast('زۆرترین بڕی پارە بۆ ڕاکێشانەوە ۱,۰۰۰ دۆلارە ($1,000)!', 'error');
       return;
     }
-    if (amt > user.balance) {
+
+    // Check weekly withdrawal count limit (max 2 per week)
+    const now = Date.now();
+    const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    let currentWeeklyCount = user.weeklyWithdrawalCount || 0;
+    let resetTime = user.weeklyWithdrawalResetTime || (now + ONE_WEEK_MS);
+
+    if (now >= resetTime) {
+      currentWeeklyCount = 0;
+      resetTime = now + ONE_WEEK_MS;
+    }
+
+    if (currentWeeklyCount >= 2) {
+      showToast('سنوورداری ڕاکێشانەوە: لە هەفتەیەکدا تەنها ۲ جار ڕێگەپێدراوە پارە بکێشیتەوە!', 'error');
+      return;
+    }
+
+    if (usdAmt > user.balance) {
       showToast('باڵانسی بەردەستت لەم بڕە کەمترە!', 'error');
       return;
     }
 
-    onRequestWithdraw(withdrawFib.trim(), amt);
+    onRequestWithdraw(withdrawFib.trim(), usdAmt);
     
     // Add transaction log
     addActivityLog(userKey, {
@@ -1214,56 +1242,6 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                   <span className={`h-1.5 rounded-full transition-all ${selectedPair === 'EUR/USD' ? 'w-4 bg-[#eab308]' : 'w-1.5 bg-zinc-800'}`} />
                   <span className={`h-1.5 rounded-full transition-all ${selectedPair === 'GBP/USD' ? 'w-4 bg-[#eab308]' : 'w-1.5 bg-zinc-800'}`} />
                   <span className={`h-1.5 rounded-full transition-all ${selectedPair === 'BTC/USD' ? 'w-4 bg-[#eab308]' : 'w-1.5 bg-zinc-800'}`} />
-                </div>
-              </div>
-
-              {/* MARKET SENTIMENT MODULE */}
-              <div id="market-sentiment-card" className="bg-[#111622] rounded-2xl p-4 border border-zinc-900/80 shadow-lg space-y-3 text-right">
-                <div className="flex items-center justify-between pb-1 border-b border-zinc-900/60">
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#eab308] bg-[#eab308]/10 px-2.5 py-0.5 rounded-full font-black">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#eab308] animate-pulse" />
-                    <span>{sentiment.statusLabelEn}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-xs font-black text-white">ئاڕاستەی بازاڕ / Market Sentiment</h4>
-                    <TrendingUp className="w-4 h-4 text-[#eab308]" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <div className="flex items-center gap-1.5 font-mono text-emerald-400 font-extrabold">
-                      <span>BUY {sentiment.buyPercent}%</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">({sentiment.totalBuys})</span>
-                    </div>
-
-                    <div className="font-extrabold text-[#eab308] text-xs">
-                      {sentiment.statusLabel}
-                    </div>
-
-                    <div className="flex items-center gap-1.5 font-mono text-rose-400 font-extrabold">
-                      <span className="text-[10px] text-zinc-500 font-normal">({sentiment.totalSells})</span>
-                      <span>{sentiment.sellPercent}% SELL</span>
-                    </div>
-                  </div>
-
-                  {/* Dual-colored progress bar */}
-                  <div className="h-2.5 w-full bg-zinc-800 rounded-full overflow-hidden flex">
-                    <div 
-                      className="bg-emerald-500 h-full transition-all duration-500 ease-out" 
-                      style={{ width: `${sentiment.buyPercent}%` }} 
-                    />
-                    <div 
-                      className="bg-rose-500 h-full transition-all duration-500 ease-out" 
-                      style={{ width: `${sentiment.sellPercent}%` }} 
-                    />
-                  </div>
-                </div>
-
-                <div className="text-[10px] text-zinc-400 leading-relaxed flex items-center justify-between">
-                  <span className="font-mono text-zinc-500">Based on {sentiment.totalBuys + sentiment.totalSells} inputs</span>
-                  <p>ڕێژەی کڕین بەرامبەر بە فرۆشتن لەسەر بنەمای سیگناڵە چالاکەکان و گرێبەستە کراوەکانت</p>
                 </div>
               </div>
 
@@ -3045,7 +3023,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-zinc-300 block">بڕی پارە دیاری بکە:</label>
               <div className="grid grid-cols-3 gap-1.5">
-                {[25000, 50000, 100000, 250000, 500000, 1000000].map((amt) => (
+                {[10000, 15000, 20000, 25000, 50000, 100000, 250000, 500000, 1000000].map((amt) => (
                   <button
                     key={amt}
                     type="button"
@@ -3168,16 +3146,16 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-[#eab308] font-bold">زۆرترین بڕ: $1,000</span>
-                  <label className="text-xs text-zinc-400 font-bold block">بڕی پارە بە دۆلار ($)</label>
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span className="text-[10px] font-mono text-[#eab308] font-bold">کەمترین: ١٥,٠٠٠ د.ع ($10) • هەفتانە: ۲ جار</span>
+                  <label className="text-xs text-zinc-400 font-bold block">بڕی پارە ($ یان د.ع)</label>
                 </div>
                 <input
                   type="number"
                   required
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
-                  placeholder="بۆ نموونە: 250"
+                  placeholder="کەمترین بڕ: 15000 د.ع یان $10"
                   className="w-full bg-[#090d16] border border-zinc-800 text-white px-4 py-3 rounded-xl text-xs outline-none focus:border-[#eab308] font-mono text-right"
                 />
               </div>
