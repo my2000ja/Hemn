@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PendingRequest, User, TradingSignal, AppSettings, VisitorSession } from '../types';
+import { formatIQD } from '../utils/currency';
 import {
   ShieldAlert,
   CheckCircle2,
@@ -1095,15 +1096,37 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           )}
                         </div>
 
-                        <div className="text-zinc-400 text-[11px] font-mono mt-1 flex flex-wrap gap-3">
+                        <div className="text-zinc-400 text-[11px] font-mono mt-1 flex flex-wrap items-center gap-3">
                           <span>📱 موبایل/FIB: <strong className="text-white">{data.fib}</strong></span>
                           <span>🔑 ئیپاسۆرد: <strong className="text-red-400">{data.pass}</strong></span>
+                          <span>💰 باڵانس: <strong className="text-emerald-400 text-xs">{formatIQD(data.balance || 0)}</strong> (${(data.balance || 0).toLocaleString()})</span>
                           {data.createdAt && (
                             <span>📅 دروستکراوە: <strong className="text-zinc-400">{data.createdAt}</strong></span>
                           )}
                           {data.lastActive && (
                             <span>⏱️ دواین چالاکی: <strong className="text-red-400">{getTimeAgoText(data.lastActive)}</strong></span>
                           )}
+                        </div>
+
+                        {/* Quick Deposit Balance Buttons */}
+                        <div className="flex items-center gap-1.5 mt-2 bg-[#120406] p-1.5 rounded-lg border border-red-900/50 w-fit">
+                          <span className="text-[10px] text-zinc-400 font-bold ml-1">داخڵکردنی باڵانس (Quick Deposit):</span>
+                          {[33.33, 66.67, 166.67, 333.33].map((usdVal, idx) => {
+                            const iqdLabel = idx === 0 ? '50,000 د.ع' : idx === 1 ? '100,000 د.ع' : idx === 2 ? '250,000 د.ع' : '500,000 د.ع';
+                            return (
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  const newBal = (data.balance || 0) + Math.round(usdVal);
+                                  onUpdateUser(key, { ...data, balance: newBal });
+                                  showToast(`بڕی ${iqdLabel} بەسەرکەوتوویی بۆ ${data.name} زیاکرا!`, 'success');
+                                }}
+                                className="px-2 py-0.5 bg-emerald-950 hover:bg-emerald-800 text-emerald-300 border border-emerald-700/60 rounded text-[10px] font-mono font-bold transition-all cursor-pointer"
+                              >
+                                + {iqdLabel}
+                              </button>
+                            );
+                          })}
                         </div>
 
                         {(data.verificationPhone || data.verificationIdNumber) && (

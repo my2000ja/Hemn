@@ -73,7 +73,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenAuth }) => {
     },
     {
       q: 'چۆن دەتوانم پارە شارژ بکەم (Deposit) بۆ ناو هەژمارەکەم؟',
-      a: 'دەتوانیت لە ڕێگەی ڕێگاکانی وەک OKX (USDT TRC20/BEP20)، FIB (First Iraqi Bank)، FastPay یان بەکار‌هێنانی کارتی ئەلیکترۆنی بە خێرایی و بەبێ هیچ تێچوویەکی زیادە پارە شارژ بکەیت.'
+      a: 'دەتوانیت لە ڕێگەی ڕێگاکانی وەک OKX (USDT TRC20/BEP20)، FIB (First Iraqi Bank) یان بەکار‌هێنانی کارتی ئەلیکترۆنی بە خێرایی و بەبێ هیچ تێچوویەکی زیادە پارە شارژ بکەیت.'
     },
     {
       q: 'ئایا شێوازی ڕاکێشانی پارە (Withdrawal) چەند کات دەخایەنێت؟',
@@ -281,7 +281,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenAuth }) => {
             </div>
             <h3 className="text-base font-black text-white mb-2">شارژ و ڕاکێشانی ئاسان</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              پشتگیری OKX USDT، FIB، FastPay و کارتی بانکی بۆ شارژکردن بە کەمترین کات.
+              پشتگیری OKX USDT، FIB و کارتی بانکی بۆ شارژکردن بە کەمترین کات.
             </p>
           </div>
         </div>

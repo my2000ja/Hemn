@@ -62,7 +62,7 @@ export const SupportBot: React.FC<SupportBotProps> = ({
       actions: [
         { label: '🪙 چۆن بە کریپتۆ و OKX پارە بنێرم؟', actionKey: 'crypto_okx_deposit' },
         { label: '🔑 چۆن ئەکاونت دروست بکەم؟', actionKey: 'account_creation_help' },
-        { label: '💳 چۆن بە (FIB / FastPay) ڕەسید بکڕم؟', actionKey: 'deposit_help' },
+        { label: '💳 چۆن بە (FIB) ڕەسید بکڕم؟', actionKey: 'deposit_help' },
         { label: '📥 ڕێنمایی بەکارهێنانی IQcode', actionKey: 'iqcode_deposit_help' },
         { label: '🛡️ چۆن ئەکاونتم باند نەبێت؟ (یاساکان)', actionKey: 'antiban_rules' },
         { label: '🔍 پشکنینی پاراستنی ئەکاونتم (Anti-Ban Check)', actionKey: 'run_diagnostics' }
@@ -219,7 +219,7 @@ export const SupportBot: React.FC<SupportBotProps> = ({
         { label: '📸 بینینی ڕێنمایی وێنەیی OKX', actionKey: 'open_okx_visual' },
         { label: '🔑 دروستکردنی ئەکاونت', actionKey: 'account_creation_help' },
         { label: '📥 ڕێنمایی IQcode', actionKey: 'iqcode_deposit_help' },
-        { label: '💳 داخلکردن بە FIB / FastPay', actionKey: 'deposit_help' }
+        { label: '💳 داخلکردن بە FIB', actionKey: 'deposit_help' }
       ];
     }
     else if (
@@ -356,7 +356,7 @@ export const SupportBot: React.FC<SupportBotProps> = ({
         `1️⃣ **دادپەروەری یاری (Fair Play):** سەرجەم ئەنجامەکانی ترەیدینگ و دۆمینۆ و کۆنکان لەسەر چارتی ڕاستەوخۆ و ئەلگۆریتمی سەربەخۆ کاردەکەن.\n` +
         `2️⃣ **سنووری بەشداربوون:** دەتوانیت بە بڕی دیاریکراوی هاوسەنگییەکەت یاری بکەیت.\n` +
         `3️⃣ **پەیوەندی ئینتەرنێت:** لەکاتی بەستنی ترەیدینگ یان یاری، دڵنیابەرەوە ئینتەرنێتەکەت جێگیرە.\n` +
-        `4️⃣ **ڕاکێشانی پارە:** دەتوانیت لە هەر کاتێکدا داواکاری ڕاکێشانی قازانجەکەت بۆ FIB یان FastPay بنێریت.`;
+        `4️⃣ **ڕاکێشانی پارە:** دەتوانیت لە هەر کاتێکدا داواکاری ڕاکێشانی قازانجەکەت بۆ FIB بنێریت.`;
 
       replyActions = [
         { label: '🎮 چوون بۆ یارییەکان', actionKey: 'open_games_hub' },

@@ -4,6 +4,7 @@ import { MrPocketLogo } from './MrPocketLogo';
 import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '../utils/i18n';
 import { getAudioMuted, setAudioMuted, playClickSound } from '../utils/audio';
+import { formatIQD } from '../utils/currency';
 
 interface HeaderProps {
   currentView: 'home' | 'history' | 'admin';
@@ -119,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-3">
             <div className="bg-[#09090b] border border-[#27272a] px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-emerald-400 font-mono font-bold text-xs sm:text-sm">
               <Wallet className="w-4 h-4 text-emerald-400" />
-              <span>{balance.toLocaleString()} $</span>
+              <span>{formatIQD(balance)}</span>
             </div>
 
             {onLogout && (

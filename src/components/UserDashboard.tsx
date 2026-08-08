@@ -42,6 +42,7 @@ import { User, AppSettings, TradingSignal } from '../types';
 import { getActivityLogs, addActivityLog } from '../utils/storage';
 import { MarketChart } from './MarketChart';
 import { MarketTicker } from './MarketTicker';
+import { formatIQD, formatDualCurrency, USD_TO_IQD_RATE } from '../utils/currency';
 
 interface UserDashboardProps {
   user: User;
@@ -237,6 +238,13 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   // Withdrawal States
   const [withdrawFib, setWithdrawFib] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
+
+  // Deposit States
+  const [depositMethod, setDepositMethod] = useState<'FIB' | 'USDT'>('FIB');
+  const [depositAmountIQD, setDepositAmountIQD] = useState<number>(50000);
+  const [depositSenderFib, setDepositSenderFib] = useState<string>('');
+  const [depositReceiptRef, setDepositReceiptRef] = useState<string>('');
+  const [depositNote, setDepositNote] = useState<string>('');
 
   // Market Search query in "Markets" tab
   const [marketSearchQuery, setMarketSearchQuery] = useState('');
@@ -636,6 +644,34 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     setWithdrawAmount('');
     setIsWithdrawModalOpen(false);
     showToast('داواکاری ڕاکێشانی پارە بە سەرکەوتوویی تۆمارکرا! دوای پێداچوونەوەی ئەدمین پارەکە ڕەوانە دەکرێت.', 'success');
+  };
+
+  // Handle Deposit Request Submission
+  const handleDepositSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!depositSenderFib.trim()) {
+      showToast('تکایە ژمارەی FIB یان حسابی نێرەر بنووسە!', 'error');
+      return;
+    }
+    const usdEquivalent = Math.round(depositAmountIQD / 1500);
+
+    onRequestBuy(
+      `بارکردنی باڵانس (${depositAmountIQD.toLocaleString()} د.ع / $${usdEquivalent})`,
+      usdEquivalent,
+      0,
+      false
+    );
+
+    addActivityLog(userKey, {
+      type: 'buy_request',
+      title: 'داواکاری بارکردنی باڵانس نێردرا',
+      detail: `بڕی ${depositAmountIQD.toLocaleString()} د.ع ($${usdEquivalent}) بەڕێگەی ${depositMethod === 'FIB' ? 'FIB' : 'USDT TRC-20'}`
+    });
+
+    setIsDepositModalOpen(false);
+    setDepositReceiptRef('');
+    setDepositNote('');
+    showToast('داواکاری بارکردنی باڵانس بەسەرکەوتوویی ڕەوانەی ئەدمین کرا!', 'success');
   };
 
   // Open Live Trade Position
@@ -2929,36 +2965,75 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer text-right"
         >
           <div 
-            className="bg-[#111622] border border-zinc-800 p-6 rounded-3xl max-w-sm w-full text-center space-y-4 relative shadow-2xl" 
+            className="bg-[#111622] border border-zinc-800 p-5 sm:p-6 rounded-3xl max-w-md w-full text-right space-y-4 relative shadow-2xl max-h-[90vh] overflow-y-auto cursor-default" 
             onClick={e => e.stopPropagation()}
           >
             <button 
               onClick={() => setIsDepositModalOpen(false)}
-              className="absolute top-4 left-4 p-1.5 rounded-full bg-zinc-900 text-zinc-400 hover:text-white"
+              className="absolute top-4 left-4 p-1.5 rounded-full bg-zinc-900 text-zinc-400 hover:text-white cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
             
-            <div className="space-y-1 pt-1">
-              <div className="flex items-center justify-center gap-2 text-[#eab308] font-bold text-sm">
+            <div className="space-y-1 pt-1 border-b border-zinc-800 pb-3">
+              <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
                 <Wallet className="w-5 h-5" />
-                <span>بارکردنی باڵانس (USDT TRC-20)</span>
+                <span>بارکردنی باڵانس (Deposit Request)</span>
               </div>
-              <p className="text-[11px] text-zinc-400 font-mono">Tether USDT (TRC-20) Network</p>
+              <p className="text-[11px] text-zinc-400 font-mono">داواکاریەکەت یەکسەر دەگاتە ئەدمین و باڵانست پڕدەکرێتەوە</p>
             </div>
 
-            <div className="bg-[#090d16] border border-zinc-900 rounded-2xl p-4 text-center space-y-2 shadow-inner">
-              <span className="text-xs text-zinc-300 font-bold block">ناونیشانی جزدانی USDT فەرمی:</span>
-              <div className="flex flex-col items-center justify-center gap-2 bg-[#111622] border border-zinc-800 p-2.5 rounded-xl">
-                <span className="text-[10px] sm:text-xs font-mono font-black text-[#eab308] select-all tracking-wider break-all leading-relaxed">
-                  TNxFn1smwabHz8PREquhcChZiQNg8uGXxm
+            {/* Payment Method Selector */}
+            <div className="flex bg-[#090d16] p-1 rounded-xl border border-zinc-800 gap-1">
+              <button
+                type="button"
+                onClick={() => setDepositMethod('FIB')}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  depositMethod === 'FIB'
+                    ? 'bg-amber-500 text-zinc-950 font-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Wallet className="w-4 h-4" />
+                <span>FIB (دینار)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDepositMethod('USDT')}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  depositMethod === 'USDT'
+                    ? 'bg-indigo-600 text-white font-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <QrCode className="w-4 h-4" />
+                <span>USDT TRC-20</span>
+              </button>
+            </div>
+
+            {/* Target Account Display */}
+            <div className="bg-[#090d16] border border-amber-500/30 rounded-2xl p-3.5 space-y-2 shadow-inner">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-zinc-400 font-mono">
+                  {depositMethod === 'FIB' ? 'ژمارەی FIB فەرمی:' : 'ناونیشانی USDT (TRC-20):'}
+                </span>
+                <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  ئامادەیە بۆ وەرگرتن
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2 bg-[#111622] border border-zinc-800 p-2.5 rounded-xl">
+                <span className="text-xs sm:text-sm font-mono font-black text-amber-400 select-all tracking-wider dir-ltr truncate">
+                  {depositMethod === 'FIB' ? (settings.fibNumber || '07512189730') : 'TNxFn1smwabHz8PREquhcChZiQNg8uGXxm'}
                 </span>
                 <button
+                  type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText('TNxFn1smwabHz8PREquhcChZiQNg8uGXxm');
-                    showToast('ناونیشانی USDT (TRC-20) کۆپی کرا!', 'success');
+                    const targetNum = depositMethod === 'FIB' ? (settings.fibNumber || '07512189730') : 'TNxFn1smwabHz8PREquhcChZiQNg8uGXxm';
+                    navigator.clipboard.writeText(targetNum);
+                    showToast(`${depositMethod === 'FIB' ? 'ژمارەی FIB' : 'ناونیشانی USDT'} کۆپی کرا!`, 'success');
                   }}
-                  className="px-4 py-1.5 bg-[#090d16] hover:bg-zinc-900 border border-zinc-800 rounded-lg text-[#eab308] transition-all text-xs font-bold flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1 bg-[#090d16] hover:bg-zinc-800 border border-zinc-700 rounded-lg text-amber-400 transition-all text-xs font-bold flex items-center gap-1 shrink-0 cursor-pointer"
                 >
                   <Copy className="w-3.5 h-3.5" />
                   <span>کۆپیکردن</span>
@@ -2966,17 +3041,92 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               </div>
             </div>
 
-            <div className="bg-[#090d16] border border-zinc-900 rounded-xl p-3 text-right text-[11px] text-zinc-400 space-y-1 leading-normal">
-              <strong className="text-[#eab308] font-bold block">شێوازی ناردن:</strong>
-              <p>پارەکە لەڕێگەی تۆڕی ترۆن TRC-20 ڕەوانەی ئەم جزدانە بکە، پاشان وێنەی پسوولە بنێرە لە ڕێگەی دەسکتۆپ یان چات تا خێرا باڵانست پڕبکرێتەوە.</p>
+            {/* Preset Amount Chips (IQD) */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-zinc-300 block">بڕی پارە دیاری بکە:</label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[25000, 50000, 100000, 250000, 500000, 1000000].map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    onClick={() => setDepositAmountIQD(amt)}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-mono font-bold border transition-all cursor-pointer ${
+                      depositAmountIQD === amt
+                        ? 'bg-amber-500/20 border-amber-500 text-amber-400'
+                        : 'bg-[#090d16] border-zinc-800 text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    {formatIQD(amt / 1500)}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <button
-              onClick={() => setIsDepositModalOpen(false)}
-              className="w-full py-2.5 bg-zinc-900 border border-zinc-800 text-[#eab308] hover:text-white font-bold rounded-xl text-xs cursor-pointer"
-            >
-              داخستنی لاپەڕە
-            </button>
+            <form onSubmit={handleDepositSubmit} className="space-y-3">
+              {/* Custom IQD Amount Input */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[10px] text-amber-400 font-mono">
+                    یەکسانە بە: ${(depositAmountIQD / 1500).toFixed(2)} دۆلار
+                  </span>
+                  <label className="text-xs text-zinc-300 font-bold">بڕی پارە بە دیناری عێراقی (د.ع):</label>
+                </div>
+                <input
+                  type="number"
+                  required
+                  min={1000}
+                  step={1000}
+                  value={depositAmountIQD}
+                  onChange={(e) => setDepositAmountIQD(Number(e.target.value))}
+                  placeholder="مثال: 50000"
+                  className="w-full bg-[#090d16] border border-zinc-800 text-amber-400 font-mono font-bold px-3.5 py-2 rounded-xl text-xs outline-none focus:border-amber-500 text-right"
+                />
+              </div>
+
+              {/* Sender FIB Account / Wallet */}
+              <div className="space-y-1">
+                <label className="text-xs text-zinc-300 font-bold block">ژمارەی FIB / حسابی نێرەر *</label>
+                <input
+                  type="text"
+                  required
+                  value={depositSenderFib}
+                  onChange={(e) => setDepositSenderFib(e.target.value)}
+                  placeholder="ژمارەی هەژمارەکەت کە پارەکەت پێ ناردووە"
+                  className="w-full bg-[#090d16] border border-zinc-800 text-white px-3.5 py-2 rounded-xl text-xs outline-none focus:border-amber-500 text-right font-mono"
+                />
+              </div>
+
+              {/* Receipt Reference ID */}
+              <div className="space-y-1">
+                <label className="text-xs text-zinc-300 font-bold block">ناسنامەی پسوولە / Transaction Ref ID *</label>
+                <input
+                  type="text"
+                  required
+                  value={depositReceiptRef}
+                  onChange={(e) => setDepositReceiptRef(e.target.value)}
+                  placeholder="ژمارەی پسوولەی گواستنەوە"
+                  className="w-full bg-[#090d16] border border-zinc-800 text-white px-3.5 py-2 rounded-xl text-xs outline-none focus:border-amber-500 text-right font-mono"
+                />
+              </div>
+
+              {/* Submit button */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black rounded-xl text-xs transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>ناردنی داواکاری بۆ ئەدمین</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsDepositModalOpen(false)}
+                  className="py-2.5 px-4 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 font-bold rounded-xl text-xs transition-all cursor-pointer"
+                >
+                  پاشگەزبوونەوە
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
